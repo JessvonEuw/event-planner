@@ -22,7 +22,7 @@ model Event {
   notes       String? @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  rsvps       RSVP[]
+  guests       Guest[]
   userEvents  UserEvent[]
 }
 
@@ -44,7 +44,7 @@ model UserEvent {
   event   Event @relation(fields: [eventId], references: [id])
 }
 
-model RSVP {
+model Guest {
   id          String   @id @default(uuid())
   eventId     String
   event       Event @relation(fields: [eventId], references: [id])
