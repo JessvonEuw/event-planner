@@ -1,6 +1,7 @@
 const events = [
   {
     title: "Carl's Birthday Bash",
+    slug: "carls-birthday-bash",
     description:
       "Join us for a night of fun and games as we celebrate Carl's 30th birthday!",
     date: new Date("2025-03-15T19:00:00Z"),
@@ -14,7 +15,7 @@ const events = [
             email: "bob.doe@example.com",
             phone: "123-456-7890",
             eventId: "1",
-            isAttending: true,
+            attending: true,
             notes: "Allergic to nuts",
           },
           {
@@ -22,7 +23,7 @@ const events = [
             email: "helen.doe@example.com",
             phone: "123-456-7891",
             eventId: "1",
-            isAttending: true,
+            attending: true,
             notes: "Bringing a +1",
           },
           {
@@ -30,7 +31,7 @@ const events = [
             email: "michael.johnson@example.com",
             phone: "123-456-7892",
             eventId: "1",
-            isAttending: false,
+            attending: false,
             notes: "Out of town that weekend",
           },
           {
@@ -38,7 +39,7 @@ const events = [
             email: "emily.davis@example.com",
             phone: "123-456-7893",
             eventId: "1",
-            isAttending: false,
+            attending: false,
             notes: "Hasn't responded yet - pending",
           },
           {
@@ -46,7 +47,7 @@ const events = [
             email: "robert.wilson@example.com",
             phone: "123-456-7894",
             eventId: "1",
-            isAttending: true,
+            attending: true,
             notes: "Vegetarian meal preference",
           },
         ],
@@ -55,6 +56,7 @@ const events = [
   },
   {
     title: "Tech Meetup",
+    slug: "tech-meetup",
     description:
       "Come to hear about the latest trends in tech and network with other professionals.",
     date: new Date("2025-04-08T19:00:00Z"),
@@ -68,7 +70,7 @@ const events = [
             email: "sarah.thompson@example.com",
             phone: "123-456-7895",
             eventId: "2",
-            isAttending: true,
+            attending: true,
             notes: "Plus one: David Miller",
           },
           {
@@ -76,7 +78,7 @@ const events = [
             email: "james.anderson@example.com",
             phone: "123-456-7896",
             eventId: "2",
-            isAttending: true,
+            attending: true,
             notes: "Gluten-free meal required",
           },
           {
@@ -84,7 +86,7 @@ const events = [
             email: "jennifer.martinez@example.com",
             phone: "123-456-7897",
             eventId: "2",
-            isAttending: false,
+            attending: false,
             notes: "Sending a gift",
           },
           {
@@ -92,7 +94,7 @@ const events = [
             email: "daniel.taylor@example.com",
             phone: "123-456-7898",
             eventId: "2",
-            isAttending: true,
+            attending: true,
             notes: "Coming from out of town, needs accommodation info",
           },
           {
@@ -100,7 +102,7 @@ const events = [
             email: "jessica.brown@example.com",
             phone: "123-456-7899",
             eventId: "2",
-            isAttending: false,
+            attending: false,
             notes: "Invitation sent, awaiting response - pending",
           },
         ],
@@ -109,6 +111,7 @@ const events = [
   },
   {
     title: "Monthly Book Club",
+    slug: "monthly-book-club",
     description: "We're reading 'The Women' by Kristin Hannah.",
     date: new Date("2025-03-28T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
@@ -121,7 +124,7 @@ const events = [
             email: "thomas.clark@example.com",
             phone: "123-456-7900",
             eventId: "3",
-            isAttending: true,
+            attending: true,
             notes: "CEO of Partner Company",
           },
           {
@@ -129,7 +132,7 @@ const events = [
             email: "lisa.rodriguez@example.com",
             phone: "123-456-7901",
             eventId: "3",
-            isAttending: true,
+            attending: true,
             notes: "Presenting at the event",
           },
           {
@@ -137,7 +140,7 @@ const events = [
             email: "william.lee@example.com",
             phone: "123-456-7902",
             eventId: "3",
-            isAttending: false,
+            attending: false,
             notes: "Schedule conflict",
           },
           {
@@ -145,7 +148,7 @@ const events = [
             email: "patricia.walker@example.com",
             phone: "123-456-7903",
             eventId: "3",
-            isAttending: true,
+            attending: true,
             notes: "Requires vegetarian option",
           },
           {
@@ -153,7 +156,7 @@ const events = [
             email: "christopher.hall@example.com",
             phone: "123-456-7904",
             eventId: "3",
-            isAttending: true,
+            attending: true,
             notes: "Interested in networking opportunities",
           },
         ],
@@ -162,6 +165,7 @@ const events = [
   },
   {
     title: "Weekly BJJ Class",
+    slug: "weekly-bjj-class",
     description: "Practicing our submissions and sweeps.",
     date: new Date("2025-03-13T19:00:00Z"),
     location: "BJJ Gym, Anytown, Canada",
@@ -174,7 +178,7 @@ const events = [
             email: "charles.scott@example.com",
             phone: "123-456-7910",
             eventId: "4",
-            isAttending: true,
+            attending: true,
             notes: "Former teacher",
           },
           {
@@ -182,7 +186,7 @@ const events = [
             email: "nancy.green@example.com",
             phone: "123-456-7911",
             eventId: "4",
-            isAttending: true,
+            attending: true,
             notes: "Family friend",
           },
           {
@@ -190,7 +194,7 @@ const events = [
             email: "matthew.adams@example.com",
             phone: "123-456-7912",
             eventId: "4",
-            isAttending: false,
+            attending: false,
             notes: "Out of the country",
           },
           {
@@ -198,7 +202,7 @@ const events = [
             email: "karen.baker@example.com",
             phone: "123-456-7913",
             eventId: "4",
-            isAttending: true,
+            attending: true,
             notes: "Bringing graduation gift",
           },
           {
@@ -206,7 +210,7 @@ const events = [
             email: "joshua.nelson@example.com",
             phone: "123-456-7914",
             eventId: "4",
-            isAttending: false,
+            attending: false,
             notes: "Classmate, waiting for confirmation - pending",
           },
         ],
@@ -215,6 +219,7 @@ const events = [
   },
   {
     title: "Cool board games event",
+    slug: "cool-board-games-event",
     description: "Random games, random people, random fun.",
     date: new Date("2025-04-12T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
@@ -227,7 +232,7 @@ const events = [
             email: "donna.carter@example.com",
             phone: "123-456-7915",
             eventId: "5",
-            isAttending: true,
+            attending: true,
             notes: "Bringing a plant as housewarming gift",
           },
           {
@@ -235,7 +240,7 @@ const events = [
             email: "paul.mitchell@example.com",
             phone: "123-456-7916",
             eventId: "5",
-            isAttending: true,
+            attending: true,
             notes: "Neighbor from previous residence",
           },
           {
@@ -243,7 +248,7 @@ const events = [
             email: "michelle.perez@example.com",
             phone: "123-456-7917",
             eventId: "5",
-            isAttending: false,
+            attending: false,
             notes: "Previous commitment",
           },
           {
@@ -251,7 +256,7 @@ const events = [
             email: "mark.roberts@example.com",
             phone: "123-456-7918",
             eventId: "5",
-            isAttending: true,
+            attending: true,
             notes: "Bringing wine and cheese",
           },
           {
@@ -259,7 +264,7 @@ const events = [
             email: "laura.turner@example.com",
             phone: "123-456-7919",
             eventId: "5",
-            isAttending: false,
+            attending: false,
             notes: "Needs directions to the new house - pending response",
           },
         ],
@@ -268,6 +273,7 @@ const events = [
   },
   {
     title: "Bella's Baby Shower",
+    slug: "bella-s-baby-shower",
     description: "Join us to celebrate Bella's upcoming arrival!",
     date: new Date("2025-05-22T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
@@ -280,7 +286,7 @@ const events = [
             email: "elizabeth.young@example.com",
             phone: "123-456-7905",
             eventId: "6",
-            isAttending: true,
+            attending: true,
             notes: "Bringing a gift",
           },
           {
@@ -288,7 +294,7 @@ const events = [
             email: "richard.king@example.com",
             phone: "123-456-7906",
             eventId: "6",
-            isAttending: false,
+            attending: false,
             notes: "Sending a gift card",
           },
           {
@@ -296,7 +302,7 @@ const events = [
             email: "susan.wright@example.com",
             phone: "123-456-7907",
             eventId: "6",
-            isAttending: true,
+            attending: true,
             notes: "Close friend of the mother",
           },
           {
@@ -304,7 +310,7 @@ const events = [
             email: "joseph.lopez@example.com",
             phone: "123-456-7908",
             eventId: "6",
-            isAttending: false,
+            attending: false,
             notes: "Needs to check calendar - pending response",
           },
           {
@@ -312,7 +318,7 @@ const events = [
             email: "margaret.hill@example.com",
             phone: "123-456-7909",
             eventId: "6",
-            isAttending: true,
+            attending: true,
             notes: "Grandmother of the baby",
           },
         ],
