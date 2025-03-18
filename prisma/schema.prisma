@@ -28,7 +28,8 @@ model Event {
   title       String
   slug        String      @unique
   description String
-  date        DateTime
+  startDate   DateTime
+  endDate     DateTime?
   location    String
   notes       String?     @db.Text
   createdAt   DateTime    @default(now()) @map("created_at")

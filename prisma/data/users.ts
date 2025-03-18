@@ -1,7 +1,7 @@
-import { Role } from "@prisma/client";
+import { Role, Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
 
-async function getUsers() {
+async function getUsers(): Promise<Array<Prisma.UserCreateInput>> {
   return [
     {
       id: "1",

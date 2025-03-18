@@ -1,4 +1,6 @@
-const userEvents = [
+import { Prisma } from "@prisma/client";
+
+const userEvents: Prisma.UserEventUncheckedCreateInput[] = [
   {
     userId: "1",
     eventId: "1",
