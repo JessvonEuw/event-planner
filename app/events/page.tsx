@@ -16,7 +16,7 @@ function formatDate(date: Date): string {
 export default async function EventsPage() {
   const events = await prisma.event.findMany({
     orderBy: {
-      date: "asc",
+      startDate: "asc",
     },
   });
 
@@ -42,7 +42,7 @@ export default async function EventsPage() {
               <div className="flex items-start justify-between">
                 <h2 className="text-xl font-bold mb-2">{event.title}</h2>
                 <div className="bg-foreground text-xs px-2 py-1 rounded-full">
-                  {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
+                  {new Date(event.startDate) > new Date() ? "Upcoming" : "Past"}
                 </div>
               </div>
 
@@ -64,7 +64,13 @@ export default async function EventsPage() {
                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className="text-sm">{formatDate(event.date)}</span>
+                  <span className="text-sm">
+                    {formatDate(event.startDate)}
+                    {event.endDate &&
+                      formatDate(event.endDate) !==
+                        formatDate(event.startDate) &&
+                      ` - ${formatDate(event.endDate)}`}
+                  </span>
                 </div>
 
                 <div className="flex items-start">
