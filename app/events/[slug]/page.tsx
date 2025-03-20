@@ -211,7 +211,6 @@ export default async function EventPage({
         </div>
       </div>
 
-      {/* Temporarily commenting out the form as it has issues */}
       <form
         action={createEvent}
         className="flex flex-col gap-6 text-white bg-gray-50 dark:bg-gray-800 p-8 max-w-4xl mx-auto rounded-lg shadow-md mt-8"
