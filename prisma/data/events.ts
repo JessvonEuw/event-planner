@@ -6,7 +6,7 @@ const events: Prisma.EventCreateInput[] = [
     slug: "carls-birthday-bash",
     description:
       "Join us for a night of fun and games as we celebrate Carl's 30th birthday!",
-    startDate: new Date("2025-03-15T19:00:00Z"),
+    date: new Date("2025-03-15T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
     notes: "Please bring a dish to share. BYOB.",
     guests: {
@@ -56,8 +56,7 @@ const events: Prisma.EventCreateInput[] = [
     slug: "tech-meetup",
     description:
       "Come to hear about the latest trends in tech and network with other professionals.",
-    startDate: new Date("2025-04-08T19:00:00Z"),
-    endDate: new Date("2025-04-10T19:00:00Z"),
+    date: new Date("2025-04-08T19:00:00Z"),
     location: "Tech Centre, Anytown, Canada",
     notes: "Please bring your business cards.",
     guests: {
@@ -106,7 +105,7 @@ const events: Prisma.EventCreateInput[] = [
     title: "Monthly Book Club",
     slug: "monthly-book-club",
     description: "We're reading 'The Women' by Kristin Hannah.",
-    startDate: new Date("2025-03-28T19:00:00Z"),
+    date: new Date("2025-03-28T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
     notes: "Please bring a copy of the book.",
     guests: {
@@ -155,7 +154,7 @@ const events: Prisma.EventCreateInput[] = [
     title: "Weekly BJJ Class",
     slug: "weekly-bjj-class",
     description: "Practicing our submissions and sweeps.",
-    startDate: new Date("2025-03-13T19:00:00Z"),
+    date: new Date("2025-03-13T19:00:00Z"),
     location: "BJJ Gym, Anytown, Canada",
     notes: "Please bring a water bottle and a towel.",
     guests: {
@@ -204,8 +203,7 @@ const events: Prisma.EventCreateInput[] = [
     title: "Cool board games event",
     slug: "cool-board-games-event",
     description: "Random games, random people, random fun.",
-    startDate: new Date("2025-04-12T19:00:00Z"),
-    endDate: new Date("2025-04-20T19:00:00Z"),
+    date: new Date("2025-04-12T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
     notes: "Please bring a board game to share.",
     guests: {
@@ -254,7 +252,7 @@ const events: Prisma.EventCreateInput[] = [
     title: "Bella's Baby Shower",
     slug: "bella-s-baby-shower",
     description: "Join us to celebrate Bella's upcoming arrival!",
-    startDate: new Date("2025-05-22T19:00:00Z"),
+    date: new Date("2025-05-22T19:00:00Z"),
     location: "123 Main St, Anytown, Canada",
     notes: "Please bring a gift for the baby.",
     guests: {

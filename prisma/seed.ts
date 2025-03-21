@@ -1,4 +1,4 @@
-import { PrismaClient, Event } from "@prisma/client";
+import { PrismaClient, Event, Prisma } from "@prisma/client";
 import getUsers from "./data/users";
 import events from "./data/events";
 import userEvents from "./data/userEvents";
@@ -29,7 +29,6 @@ async function main() {
       const event = events[i];
 
       // Extract nested data
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { guests: eventGuests, ...eventData } = event;
 
       // Create the event first
@@ -43,21 +42,27 @@ async function main() {
       );
 
       // Create guests for this event
-      if (
-        eventGuests &&
-        eventGuests.createMany &&
-        eventGuests.createMany.data
-      ) {
-        const guestsData = eventGuests.createMany.data.map((guest) => ({
-          ...guest,
-          eventId: createdEvent.id, // Use the actual event ID
-        }));
+      if (eventGuests?.createMany?.data) {
+        const guestData = Array.isArray(eventGuests.createMany.data)
+          ? eventGuests.createMany.data
+          : [eventGuests.createMany.data];
+
+        const guestsWithEventId: Prisma.GuestCreateManyInput[] = guestData.map(
+          (guest) => ({
+            name: guest.name,
+            email: guest.email,
+            phone: guest.phone,
+            attending: guest.attending,
+            notes: guest.notes,
+            eventId: createdEvent.id,
+          })
+        );
 
         await prisma.guest.createMany({
-          data: guestsData,
+          data: guestsWithEventId,
         });
         console.log(
-          `Added ${guestsData.length} guests to event: ${createdEvent.title}`
+          `Added ${guestsWithEventId.length} guests to event: ${createdEvent.title}`
         );
       }
     }
@@ -68,7 +73,7 @@ async function main() {
     // Map the userEvents data to use the actual event IDs
     const mappedUserEvents = userEvents.map((ue, index) => ({
       userId: ue.userId,
-      eventId: createdEvents[index % createdEvents.length].id, // Map to actual event IDs
+      eventId: createdEvents[index % createdEvents.length].id,
     }));
 
     await prisma.userEvent.createMany({

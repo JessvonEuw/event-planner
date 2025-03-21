@@ -9,8 +9,7 @@ export async function createEvent(formData: EventCreateInput) {
     await prisma.event.create({
       data: {
         title: formData.get("title")?.toString() || "",
-        startDate: new Date(formData.get("startDate") as string),
-        endDate: new Date(formData.get("endDate") as string),
+        date: new Date(formData.get("date") as string),
         description: formData.get("description")?.toString() || "",
         location: formData.get("location")?.toString() || "",
         notes: formData.get("notes")?.toString() || "",
