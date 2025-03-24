@@ -1,5 +1,9 @@
 import Link from "next/link";
-import { Prisma } from "@prisma/client";
+import { Event, Guest } from "@prisma/client";
+
+interface EventWithGuests extends Event {
+  guests: Guest[];
+}
 
 // Helper function to format dates
 function formatDate(date: Date): string {
@@ -13,11 +17,7 @@ function formatDate(date: Date): string {
   });
 }
 
-export default function EventCard({
-  event,
-}: {
-  event: Prisma.EventCreateInput;
-}) {
+export default function EventCard({ event }: { event: EventWithGuests }) {
   return (
     <div
       key={event.id}

@@ -1,14 +1,23 @@
+"use client";
 import { createEvent } from "@/app/events/actions";
 import Input from '@/app/components/Input';
+import { useFormState } from 'react-dom';
 
-export default async function EventCreate() {
+function EventCreateForm() {
+  const [state, formAction] = useFormState(createEvent, { error: undefined });
+
   return (
     <form
-      action={createEvent}
+      action={formAction}
       className="flex flex-col w-1/2 gap-6 p-10 mx-auto bg-white rounded-lg shadow-md mt-8"
     >
       <div className="mb-2">
         <h2 className="text-2xl font-bold mb-4">Create New Event</h2>
+        {state?.error && (
+          <div className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+            {state.error}
+          </div>
+        )}
       </div>
       <div className="flex flex-col">
         <Input
@@ -17,7 +26,15 @@ export default async function EventCreate() {
           name="title"
           placeholder="Enter event title"
           type="text"
+          required
+          aria-describedby={state?.error ? "title-error" : undefined}
+          aria-invalid={state?.error ? "true" : "false"}
         />
+        {state?.error && state.error.includes("title") && (
+          <p id="title-error" className="mt-1 text-sm text-red-600">
+            {state.error}
+          </p>
+        )}
       </div>
       <div className="flex flex-col">
         <Input
@@ -34,7 +51,15 @@ export default async function EventCreate() {
           label="Start Date"
           name="date"
           type="date"
+          required
+          aria-describedby={state?.error ? "date-error" : undefined}
+          aria-invalid={state?.error ? "true" : "false"}
         />
+        {state?.error && state.error.includes("date") && (
+          <p id="date-error" className="mt-1 text-sm text-red-600">
+            {state.error}
+          </p>
+        )}
       </div>
       <div className="flex flex-col">
         <Input
@@ -43,7 +68,15 @@ export default async function EventCreate() {
           name="location"
           placeholder="Enter event location"
           type="text"
+          required
+          aria-describedby={state?.error ? "location-error" : undefined}
+          aria-invalid={state?.error ? "true" : "false"}
         />
+        {state?.error && state.error.includes("location") && (
+          <p id="location-error" className="mt-1 text-sm text-red-600">
+            {state.error}
+          </p>
+        )}
       </div>
       <div className="flex flex-col">
         <label htmlFor="notes" className="text-sm font-medium mb-1">
@@ -64,4 +97,8 @@ export default async function EventCreate() {
       </button>
     </form>
   );
+}
+
+export default function EventCreate() {
+  return <EventCreateForm />;
 }
