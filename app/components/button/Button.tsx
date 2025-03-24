@@ -22,7 +22,7 @@ const Button = ({
         rounded-md
         text-sm
         font-medium
-        bg-purple
+        bg-terracotta
         text-white
         hover:bg-amber-600
         focus:outline-none

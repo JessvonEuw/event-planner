@@ -12,7 +12,7 @@ const config = {
       },
     },
   },
-  plugins: ["@tailwindcss/typography"],
+  plugins: ["@tailwindcss/typography", "@tailwindcss/forms"],
 };
 
 export default config;

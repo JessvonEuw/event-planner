@@ -1,70 +1,48 @@
-import { createEvent } from "@/actions/actions";
+import { createEvent } from "@/app/events/actions";
+import Input from '@/app/components/Input';
 
 export default async function EventCreate() {
   return (
     <form
       action={createEvent}
-      className="flex flex-col gap-6 text-white bg-gray-50 dark:bg-gray-800 p-8 mx-auto rounded-lg shadow-md mt-8"
+      className="flex flex-col w-1/2 gap-6 p-10 mx-auto bg-white rounded-lg shadow-md mt-8"
     >
       <div className="mb-2">
         <h2 className="text-2xl font-bold mb-4">Create New Event</h2>
       </div>
       <div className="flex flex-col">
-        <label htmlFor="title" className="text-sm font-medium mb-1">
-          Event Title
-        </label>
-        <input
-          type="text"
-          name="title"
+        <Input
           id="title"
+          label="Event Title"
+          name="title"
           placeholder="Enter event title"
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          type="text"
         />
       </div>
       <div className="flex flex-col">
-        <label htmlFor="description" className="text-sm font-medium mb-1">
-          Description
-        </label>
-        <input
-          type="text"
-          name="description"
+        <Input
           id="description"
+          label="Description"
+          name="description"
           placeholder="Enter event description"
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="date" className="text-sm font-medium mb-1">
-          Start Date
-        </label>
-        <input
-          type="date"
-          name="startDate"
-          id="startDate"
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="date" className="text-sm font-medium mb-1">
-          End Date
-        </label>
-        <input
-          type="date"
-          name="endDate"
-          id="endDate"
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="location" className="text-sm font-medium mb-1">
-          Location
-        </label>
-        <input
           type="text"
-          name="location"
+        />
+      </div>
+      <div className="flex flex-col">
+        <Input
+          id="date"
+          label="Start Date"
+          name="date"
+          type="date"
+        />
+      </div>
+      <div className="flex flex-col">
+        <Input
           id="location"
+          label="Location"
+          name="location"
           placeholder="Enter event location"
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          type="text"
         />
       </div>
       <div className="flex flex-col">
@@ -75,7 +53,7 @@ export default async function EventCreate() {
           name="notes"
           id="notes"
           placeholder="Additional information about the event"
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
         ></textarea>
       </div>
       <button

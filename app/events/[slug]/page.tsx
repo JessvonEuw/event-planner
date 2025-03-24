@@ -1,4 +1,4 @@
-import { createEvent } from "@/actions/actions";
+import { createEvent } from "@/app/events/actions";
 import prisma from "@/lib/db";
 import Link from "next/link";
 
