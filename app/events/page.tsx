@@ -9,6 +9,7 @@ import EventCard from "./EventCard";
 import Sidebar from "./Sidebar";
 import LinkButton from '../components/LinkButton';
 import { useRouter } from 'next/navigation';
+import Button from '../components/Button';
 
 interface EventWithGuests extends Event {
   guests: Guest[];
@@ -103,7 +104,7 @@ export default function EventsPage() {
           <div className="flex flex-col justify-between mb-6">
             <h2 className="text-2xl font-bold">Events</h2>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={() => setActiveFilter('all')}
                 className={`px-4 py-2 rounded-md ${
                   activeFilter === 'all'
@@ -112,8 +113,8 @@ export default function EventsPage() {
                 }`}
               >
                 All
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveFilter('upcoming')}
                 className={`px-4 py-2 rounded-md ${
                   activeFilter === 'upcoming'
@@ -122,8 +123,8 @@ export default function EventsPage() {
                 }`}
               >
                 Upcoming
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveFilter('past')}
                 className={`px-4 py-2 rounded-md ${
                   activeFilter === 'past'
@@ -132,7 +133,7 @@ export default function EventsPage() {
                 }`}
               >
                 Past
-              </button>
+              </Button>
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4">
@@ -159,12 +160,11 @@ export default function EventsPage() {
             <p className="text-sm">john.doe@example.com</p>
           </div>
         </div>
-        <button
+        <Button
           onClick={handleLogout}
-          className="w-full mb-6 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
         >
           Logout
-        </button>
+        </Button>
         <h3 className="text-lg font-semibold mb-4">Filters</h3>
           <div>
             <h4 className="text-sm font-medium mb-2">Date Range</h4>
