@@ -1,5 +1,4 @@
 import LinkButton from '@/app/components/LinkButton';
-import Link from 'next/link';
 
 export default function EventCreateLayout({
   children,

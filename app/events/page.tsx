@@ -1,29 +1,37 @@
 "use client";
 
+import Image from "next/image";
+import { Event, Guest } from "@prisma/client";
+import { useState } from 'react';
+import UserAvatar from "@/assets/random-user.jpg";
 import { useEvents } from "@/hooks/useEvents";
 import EventCard from "./EventCard";
-import { Event, Guest } from "@prisma/client";
-import Image from "next/image";
-import UserAvatar from "@/assets/random-user.jpg";
 import Sidebar from "./Sidebar";
-import Link from 'next/link';
+import LinkButton from '../components/LinkButton';
 
 interface EventWithGuests extends Event {
   guests: Guest[];
 }
 
+type FilterType = 'all' | 'upcoming' | 'past';
+
 export default function EventsPage() {
   const { data: allEvents, isLoading: isLoadingEvents } = useEvents();
+  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
-  // Filter upcoming events
-  const upcomingEvents = allEvents?.filter(
-    (event: EventWithGuests) => new Date(event.date) >= new Date()
-  );
-
-  // Filter past events
-  const pastEvents = allEvents?.filter(
-    (event: EventWithGuests) => new Date(event.date) < new Date()
-  );
+  const filteredEvents = allEvents?.filter((event: EventWithGuests) => {
+    const eventDate = new Date(event.date);
+    const today = new Date();
+    
+    switch (activeFilter) {
+      case 'upcoming':
+        return eventDate >= today;
+      case 'past':
+        return eventDate < today;
+      default:
+        return true;
+    }
+  });
 
   if (isLoadingEvents) {
     return (
@@ -38,14 +46,14 @@ export default function EventsPage() {
       {/* Left Sidebar */}
       <Sidebar>
         <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-          <Link href="/events/create" className="bg-sage text-white px-4 py-2 rounded-md mb-4">
-            New Event
-          </Link>
-        <div className="space-y-4">
-          <div>
-            <h4 className="text-sm uppercase font-medium mb-2">Upcoming Soon</h4>
-            <div className="space-y-2">
-              {upcomingEvents?.slice(0, 2).map((event: EventWithGuests) => (
+        <LinkButton href="/events/create">
+          New Event
+        </LinkButton>
+        <div>
+          <h4 className="font-medium mb-2">Upcoming</h4>
+          <div className="space-y-2">
+            {allEvents?.filter((event: EventWithGuests) => new Date(event.date) >= new Date())
+              .slice(0, 2).map((event: EventWithGuests) => (
                 <div
                   key={event.id}
                   className="p-2 bg-black/[.03] dark:bg-white/[.03] rounded"
@@ -56,7 +64,6 @@ export default function EventsPage() {
                   </p>
                 </div>
               ))}
-            </div>
           </div>
 
           <div>
@@ -72,7 +79,7 @@ export default function EventsPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Upcoming
                 </p>
-                <p className="font-medium">{allEvents?.length || 0}</p>
+                <p className="font-medium">{allEvents?.filter((event: EventWithGuests) => new Date(event.date) >= new Date()).length || 0}</p>
               </div>
             </div>
           </div>
@@ -81,23 +88,46 @@ export default function EventsPage() {
 
       {/* Main Content */}
       <main className="flex-1">
-        <div className="space-y-6">
-          <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">Upcoming Events</h2>
-            <div className="grid grid-cols-1 gap-4">
-              {upcomingEvents?.map((event: EventWithGuests) => (
-                <EventCard key={event.id} event={event} />
-              ))}
+        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+          <div className="flex flex-col justify-between mb-6">
+            <h2 className="text-2xl font-bold">Events</h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setActiveFilter('all')}
+                className={`px-4 py-2 rounded-md ${
+                  activeFilter === 'all'
+                    ? 'bg-amber-500 text-white'
+                    : 'bg-black/[.03] dark:bg-white/[.03] hover:bg-black/[.06] dark:hover:bg-white/[.06]'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setActiveFilter('upcoming')}
+                className={`px-4 py-2 rounded-md ${
+                  activeFilter === 'upcoming'
+                    ? 'bg-amber-500 text-white'
+                    : 'bg-black/[.03] dark:bg-white/[.03] hover:bg-black/[.06] dark:hover:bg-white/[.06]'
+                }`}
+              >
+                Upcoming
+              </button>
+              <button
+                onClick={() => setActiveFilter('past')}
+                className={`px-4 py-2 rounded-md ${
+                  activeFilter === 'past'
+                    ? 'bg-amber-500 text-white'
+                    : 'bg-black/[.03] dark:bg-white/[.03] hover:bg-black/[.06] dark:hover:bg-white/[.06]'
+                }`}
+              >
+                Past
+              </button>
             </div>
           </div>
-
-          <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">Past Events</h2>
-            <div className="grid grid-cols-1 gap-4">
-              {pastEvents?.map((event: EventWithGuests) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 gap-4">
+            {filteredEvents?.map((event: EventWithGuests) => (
+              <EventCard key={event.id} event={event} />
+            ))}
           </div>
         </div>
       </main>
@@ -115,11 +145,10 @@ export default function EventsPage() {
           />
           <div>
             <h3 className="font-semibold text-lg">John Doe</h3>
-            <p className="text-sm text-white">john.doe@example.com</p>
+            <p className="text-sm">john.doe@example.com</p>
           </div>
         </div>
         <h3 className="text-lg font-semibold mb-4">Filters</h3>
-        <div className="space-y-4">
           <div>
             <h4 className="text-sm font-medium mb-2">Date Range</h4>
             <select className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600">
@@ -148,7 +177,6 @@ export default function EventsPage() {
                 <input type="checkbox" className="mr-2" />
                 <span>Other</span>
               </label>
-            </div>
           </div>
         </div>
       </Sidebar>
