@@ -1,7 +1,6 @@
 "use client";
 
 import { useEvents } from "@/hooks/useEvents";
-import { useUser } from "@/hooks/useUser";
 import EventCard from "./EventCard";
 import { Event, Guest } from "@prisma/client";
 import Image from "next/image";
@@ -15,8 +14,6 @@ interface EventWithGuests extends Event {
 
 export default function EventsPage() {
   const { data: allEvents, isLoading: isLoadingEvents } = useEvents();
-  console.log(allEvents);
-  const { data: user, isLoading: isLoadingUser } = useUser();
 
   // Filter upcoming events
   const upcomingEvents = allEvents?.filter(
@@ -28,7 +25,7 @@ export default function EventsPage() {
     (event: EventWithGuests) => new Date(event.date) < new Date()
   );
 
-  if (isLoadingEvents || isLoadingUser) {
+  if (isLoadingEvents) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
@@ -117,8 +114,8 @@ export default function EventsPage() {
             className="w-12 h-12 rounded-full"
           />
           <div>
-            <h3 className="font-semibold text-lg">{user?.name}</h3>
-            <p className="text-sm text-white">{user?.email}</p>
+            <h3 className="font-semibold text-lg">John Doe</h3>
+            <p className="text-sm text-white">john.doe@example.com</p>
           </div>
         </div>
         <h3 className="text-lg font-semibold mb-4">Filters</h3>
