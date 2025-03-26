@@ -8,6 +8,7 @@ import { useEvents } from "@/hooks/useEvents";
 import EventCard from "./EventCard";
 import Sidebar from "./Sidebar";
 import LinkButton from '../components/LinkButton';
+import { useRouter } from 'next/navigation';
 
 interface EventWithGuests extends Event {
   guests: Guest[];
@@ -16,8 +17,18 @@ interface EventWithGuests extends Event {
 type FilterType = 'all' | 'upcoming' | 'past';
 
 export default function EventsPage() {
+  const router = useRouter();
   const { data: allEvents, isLoading: isLoadingEvents } = useEvents();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   const filteredEvents = allEvents?.filter((event: EventWithGuests) => {
     const eventDate = new Date(event.date);
@@ -148,6 +159,12 @@ export default function EventsPage() {
             <p className="text-sm">john.doe@example.com</p>
           </div>
         </div>
+        <button
+          onClick={handleLogout}
+          className="w-full mb-6 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+        >
+          Logout
+        </button>
         <h3 className="text-lg font-semibold mb-4">Filters</h3>
           <div>
             <h4 className="text-sm font-medium mb-2">Date Range</h4>
