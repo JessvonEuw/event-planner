@@ -1,4 +1,3 @@
-import { createEvent } from "@/app/events/actions";
 import prisma from "@/lib/db";
 import Link from "next/link";
 
@@ -52,19 +51,27 @@ export default async function EventPage({
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">{event.title}</h1>
-        <Link
-          href="/events"
-          className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity"
-        >
-          Back to Events
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href={`/events/${slug}/edit`}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Edit Event
+          </Link>
+          <Link
+            href="/events"
+            className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity"
+          >
+            Back to Events
+          </Link>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-black/[.05] rounded-lg overflow-hidden shadow-md p-6 max-w-4xl mx-auto">
         <div className="flex items-start justify-between mb-6">
           <h2 className="text-2xl font-bold">{event.title}</h2>
           <div className="bg-foreground text-background text-xs px-3 py-1 rounded-full">
-            {new Date(event.startDate) > new Date() ? "Upcoming" : "Past"}
+            {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
           </div>
         </div>
 
@@ -87,15 +94,7 @@ export default async function EventPage({
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span className="text-md">
-                {formatDate(event.startDate)}
-                {event.endDate &&
-                  formatDate(event.endDate) !== formatDate(event.startDate) && (
-                    <span className="block mt-1">
-                      to {formatDate(event.endDate)}
-                    </span>
-                  )}
-              </span>
+              <span className="text-md">{formatDate(event.date)}</span>
             </div>
 
             <div className="flex items-start">
@@ -200,7 +199,6 @@ export default async function EventPage({
           </div>
         )}
 
-        {/* We'll keep this link but modify it to be more meaningful */}
         <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
           <Link
             href="/events"

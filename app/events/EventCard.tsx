@@ -59,12 +59,18 @@ export default function EventCard({ event }: { event: EventWithGuests }) {
           </div>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
           <Link
             href={`/events/${event.slug}`}
             className="text-sm font-medium hover:underline"
           >
             View Details →
+          </Link>
+          <Link
+            href={`/events/${event.slug}/edit`}
+            className="text-sm font-medium text-blue-600 hover:text-blue-800"
+          >
+            Edit Event
           </Link>
         </div>
       </div>

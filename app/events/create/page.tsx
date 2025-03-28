@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
-import CreateForm from './CreateForm';
-import GuestForm from './GuestForm';
+import EventForm from '@/app/components/EventForm';
+import GuestForm from '@/app/components/GuestForm';
 import LinkButton from '@/app/components/LinkButton';
 
 type EventDetails = {
@@ -88,7 +88,7 @@ export default function EventCreateForm() {
       ) : (
         <>
           {currentStep === 1 ? (
-            <CreateForm onSubmit={handleEventDetailsSubmit} />
+            <EventForm onSubmit={handleEventDetailsSubmit} />
           ) : (
             <GuestForm
               onSubmit={handleGuestsSubmit}

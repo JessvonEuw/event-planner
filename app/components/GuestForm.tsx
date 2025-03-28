@@ -10,10 +10,13 @@ type Guest = {
 type GuestFormProps = {
   onSubmit: (guests: Guest[]) => void;
   onBack: () => void;
+  initialGuests?: Guest[];
 };
 
-export default function GuestForm({ onSubmit, onBack }: GuestFormProps) {
-  const [guests, setGuests] = useState<Guest[]>([{ name: '', email: '' }]);
+export default function GuestForm({ onSubmit, onBack, initialGuests = [] }: GuestFormProps) {
+  const [guests, setGuests] = useState<Guest[]>(
+    initialGuests.length > 0 ? initialGuests : [{ name: '', email: '' }]
+  );
 
   const addGuest = () => {
     setGuests([...guests, { name: '', email: '' }]);
@@ -97,7 +100,7 @@ export default function GuestForm({ onSubmit, onBack }: GuestFormProps) {
           type="submit"
           className="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          Create Event
+          {initialGuests.length > 0 ? 'Update Guests' : 'Create Event'}
         </button>
       </div>
     </form>
