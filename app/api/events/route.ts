@@ -23,53 +23,70 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json();
+    const formData = await request.formData();
+    
+    // Extract event details
+    const title = formData.get('title')?.toString();
+    const description = formData.get('description')?.toString();
+    const date = formData.get('date')?.toString();
+    const location = formData.get('location')?.toString();
+    const notes = formData.get('notes')?.toString();
+    const guestsJson = formData.get('guests')?.toString();
 
     // Validate required fields
-    if (!data.title || !data.date || !data.location) {
+    if (!title || !date || !location) {
       return NextResponse.json(
-        {
-          error:
-            "Missing required fields: title, date, and location are required",
-        },
+        { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Generate a slug from the title
-    const slug = data.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
+    // Parse guests
+    let guests = [];
+    if (guestsJson) {
+      try {
+        guests = JSON.parse(guestsJson);
+      } catch {
+        return NextResponse.json(
+          { error: 'Invalid guests data' },
+          { status: 400 }
+        );
+      }
+    }
 
-    // Create the event
-    const event = await prisma.event.create({
-      data: {
-        ...data,
-        slug,
-        date: new Date(data.date),
-        description: data.description || "",
-        guests: data.guests
-          ? {
-              createMany: {
-                data: data.guests,
-              },
-            }
-          : undefined,
-      },
-      include: {
-        guests: true,
-      },
+    // Create event with guests in a transaction
+    const event = await prisma.$transaction(async (tx) => {
+      // Create the event
+      const event = await tx.event.create({
+        data: {
+          title,
+          date: new Date(date),
+          description: description || '',
+          location,
+          notes: notes || '',
+          slug: title.replace(/\s+/g, '-').toLowerCase(),
+        },
+      });
+
+      // Create guests if any
+      if (guests.length > 0) {
+        await tx.guest.createMany({
+          data: guests.map((guest: { name: string; email: string }) => ({
+            name: guest.name,
+            email: guest.email,
+            eventId: event.id,
+          })),
+        });
+      }
+
+      return event;
     });
 
-    return NextResponse.json(
-      { message: "Event created successfully", event },
-      { status: 201 }
-    );
+    return NextResponse.json(event);
   } catch (error) {
-    console.error("Failed to create event:", error);
+    console.error('Error creating event:', error);
     return NextResponse.json(
-      { error: "Failed to create event" },
+      { error: 'Failed to create event' },
       { status: 500 }
     );
   }
