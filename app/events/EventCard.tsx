@@ -1,43 +1,51 @@
 import Link from "next/link";
-import { Event, Guest } from "@prisma/client";
+import { EventWithGuests } from "@/lib/api/events";
 
-interface EventWithGuests extends Event {
-  guests: Guest[];
+interface EventCardProps {
+  event: EventWithGuests;
 }
 
-// Helper function to format dates
-function formatDate(date: Date): string {
-  return new Date(date).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
-}
-
-export default function EventCard({ event }: { event: EventWithGuests }) {
+export default function EventCard({ event }: EventCardProps) {
   return (
-    <div
-      key={event.id}
-      className="bg-black/[.05] dark:bg-white/[.06] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+    <Link
+      href={`/events/${event.slug}`}
+      className="block bg-white dark:bg-black/[.05] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
     >
       <div className="p-6">
-        <div className="flex items-start justify-between">
-          <h2 className="text-xl font-bold mb-2">{event.title}</h2>
-          <div className="bg-foreground text-xs px-2 py-1 rounded-full">
-            <span className="text-sm">{formatDate(event.date)}</span>
+        <div className="flex items-start justify-between mb-4">
+          <h3 className="text-xl font-bold">{event.title}</h3>
+          <div className="bg-foreground text-background text-xs px-3 py-1 rounded-full">
+            {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
           </div>
         </div>
 
-        <p className="text-sm mb-4 line-clamp-2">{event.description}</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+          {event.description}
+        </p>
 
-        <div className="space-y-2">
-          <div className="flex items-start">
+        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+              className="h-4 w-4 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            {new Date(event.date).toLocaleDateString()}
+          </div>
+
+          <div className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 mr-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -55,25 +63,28 @@ export default function EventCard({ event }: { event: EventWithGuests }) {
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <span className="text-sm">{event.location}</span>
+            {event.location}
+          </div>
+
+          <div className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            {event.guests.length} guests
           </div>
         </div>
-
-        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <Link
-            href={`/events/${event.slug}`}
-            className="text-sm font-medium hover:underline"
-          >
-            View Details →
-          </Link>
-          <Link
-            href={`/events/${event.slug}/edit`}
-            className="text-sm font-medium text-blue-600 hover:text-blue-800"
-          >
-            Edit Event
-          </Link>
-        </div>
       </div>
-    </div>
+    </Link>
   );
 }

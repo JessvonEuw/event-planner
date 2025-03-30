@@ -1,6 +1,6 @@
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
-import { cookies } from 'next/headers';
 
 export async function GET() {
   try {

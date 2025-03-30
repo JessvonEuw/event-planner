@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import Button from '@/app/components/Button';
 import Input from '@/app/components/Input';
 
 type Guest = {
@@ -70,38 +71,38 @@ export default function GuestForm({ onSubmit, onBack, initialGuests = [] }: Gues
             />
           </div>
           {guests.length > 1 && (
-            <button
+            <Button
               type="button"
               onClick={() => removeGuest(index)}
               className="mt-6 px-3 py-2 text-red-600 hover:text-red-800"
             >
               Remove
-            </button>
+            </Button>
           )}
         </div>
       ))}
 
       <div className="flex gap-4">
-        <button
+        <Button
           type="button"
           onClick={addGuest}
           className="px-4 py-2 text-blue-600 hover:text-blue-800"
         >
           + Add Guest
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={onBack}
           className="px-4 py-2 text-gray-600 hover:text-gray-800"
         >
           Back
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           className="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           {initialGuests.length > 0 ? 'Update Guests' : 'Create Event'}
-        </button>
+        </Button>
       </div>
     </form>
   );

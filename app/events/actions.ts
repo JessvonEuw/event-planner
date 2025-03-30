@@ -1,7 +1,9 @@
 "use server";
-import prisma from "@/lib/db";
+
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import prisma from "@/lib/db";
 
 type ActionState = {
   error?: string;
@@ -51,5 +53,20 @@ export async function createEvent(prevState: ActionState, formData: FormData): P
       }
     }
     return { error: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteEvent(slug: string) {
+  try {
+    await prisma.event.delete({
+      where: {
+        slug,
+      },
+    });
+    revalidatePath("/events");
+    redirect("/events");
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    throw new Error("Failed to delete event");
   }
 }

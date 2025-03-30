@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import EventForm from '@/app/components/EventForm';
 import GuestForm from '@/app/components/GuestForm';
 import LinkButton from '@/app/components/LinkButton';
+import { useEvent, useUpdateEvent } from '@/hooks/useEvents';
 
 type EventDetails = {
   title: string;
@@ -17,55 +18,32 @@ type Guest = {
   email: string;
 };
 
-type Event = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  notes: string;
-  guests: Guest[];
-};
-
 export default function EventEditForm({ params }: { params: { slug: string } }) {
   const [success, setSuccess] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [eventDetails, setEventDetails] = useState<EventDetails | null>(null);
   const [guests, setGuests] = useState<Guest[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  
+  const { data: event, isLoading, error: fetchError } = useEvent(params.slug);
+  const updateEvent = useUpdateEvent(params.slug);
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const response = await fetch(`/api/events/${params.slug}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch event');
-        }
-        const event: Event = await response.json();
-        
-        // Format the date to YYYY-MM-DD for the date input
-        const formattedDate = new Date(event.date).toISOString().split('T')[0];
-        
-        setEventDetails({
-          title: event.title,
-          description: event.description || '',
-          date: formattedDate,
-          location: event.location,
-          notes: event.notes || '',
-        });
-        setGuests(event.guests);
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Error fetching event:', err);
-        setError('Failed to load event details');
-        setIsLoading(false);
-      }
-    };
-
-    fetchEvent();
-  }, [params.slug]);
+    if (event) {
+      const formattedDate = new Date(event.date).toISOString().split('T')[0];
+      
+      setEventDetails({
+        title: event.title,
+        description: event.description || '',
+        date: formattedDate,
+        location: event.location,
+        notes: event.notes || '',
+      });
+      setGuests(event.guests.map(guest => ({
+        name: guest.name,
+        email: guest.email || '',
+      })));
+    }
+  }, [event]);
 
   const handleEventDetailsSubmit = (details: EventDetails) => {
     setEventDetails(details);
@@ -75,27 +53,14 @@ export default function EventEditForm({ params }: { params: { slug: string } }) 
   const handleGuestsSubmit = async (updatedGuests: Guest[]) => {
     if (!eventDetails) return;
 
-    const formData = new FormData();
-    Object.entries(eventDetails).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    formData.append('guests', JSON.stringify(updatedGuests));
-
     try {
-      const response = await fetch(`/api/events/${params.slug}`, {
-        method: 'PUT',
-        body: formData,
+      await updateEvent.mutateAsync({
+        ...eventDetails,
+        guests: updatedGuests,
       });
-
-      if (response.ok) {
-        setSuccess(true);
-      } else {
-        throw new Error('Failed to update event');
-      }
+      setSuccess(true);
     } catch (error) {
       console.error('Error updating event:', error);
-      setError('Failed to update event');
     }
   };
 
@@ -107,10 +72,10 @@ export default function EventEditForm({ params }: { params: { slug: string } }) 
     );
   }
 
-  if (error) {
+  if (fetchError) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 min-h-screen">
-        <p className="text-red-600">{error}</p>
+        <p className="text-red-600">Failed to load event details</p>
         <LinkButton href="/events">Back to Events</LinkButton>
       </div>
     );

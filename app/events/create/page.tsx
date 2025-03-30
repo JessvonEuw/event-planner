@@ -1,8 +1,10 @@
 "use client";
 import { useState } from 'react';
+import Button from '@/app/components/Button';
 import EventForm from '@/app/components/EventForm';
 import GuestForm from '@/app/components/GuestForm';
 import LinkButton from '@/app/components/LinkButton';
+import { useCreateEvent } from '@/hooks/useEvents';
 
 type EventDetails = {
   title: string;
@@ -28,6 +30,7 @@ export default function EventCreateForm() {
   const [eventDetails, setEventDetails] = useState<EventDetails | null>(null);
   const [createdEvent, setCreatedEvent] = useState<Event | null>(null);
   const [copied, setCopied] = useState(false);
+  const createEvent = useCreateEvent();
 
   const handleEventDetailsSubmit = (details: EventDetails) => {
     setEventDetails(details);
@@ -37,24 +40,13 @@ export default function EventCreateForm() {
   const handleGuestsSubmit = async (guests: Guest[]) => {
     if (!eventDetails) return;
 
-    const formData = new FormData();
-    Object.entries(eventDetails).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    formData.append('guests', JSON.stringify(guests));
-
     try {
-      const response = await fetch('/api/events', {
-        method: 'POST',
-        body: formData,
+      const event = await createEvent.mutateAsync({
+        ...eventDetails,
+        guests,
       });
-
-      if (response.ok) {
-        const event = await response.json();
-        setCreatedEvent(event);
-        setSuccess(true);
-      }
+      setCreatedEvent(event);
+      setSuccess(true);
     } catch (error) {
       console.error('Error creating event:', error);
     }
@@ -75,12 +67,12 @@ export default function EventCreateForm() {
         <div className="flex flex-col items-center justify-center gap-4 h-screen">
           <h1 className="text-2xl font-bold">Event created successfully</h1>
           <div className="flex flex-col gap-2">
-            <button
+            <Button
               onClick={handleCopyLink}
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
             >
               {copied ? 'Link copied!' : 'Share event link'}
-            </button>
+            </Button>
             <LinkButton href="/events" onClick={() => setSuccess(false)}>See your events</LinkButton>
             <LinkButton href="/events/create" onClick={() => setSuccess(false)}>Create another event</LinkButton>
           </div>

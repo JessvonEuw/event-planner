@@ -1,19 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import { Event, Guest } from "@prisma/client";
 import { useState } from 'react';
-import UserAvatar from "@/assets/random-user.jpg";
-import { useEvents } from "@/hooks/useEvents";
+import Image from "next/image";
+import { useRouter } from 'next/navigation';
 import EventCard from "./EventCard";
 import Sidebar from "./Sidebar";
-import LinkButton from '../components/LinkButton';
-import { useRouter } from 'next/navigation';
-import Button from '../components/Button';
-
-interface EventWithGuests extends Event {
-  guests: Guest[];
-}
+import Button from '@/app/components/Button';
+import LinkButton from '@/app/components/LinkButton';
+import { useEvents } from "@/hooks/useEvents";
+import UserAvatar from "@/assets/random-user.jpg";
 
 type FilterType = 'all' | 'upcoming' | 'past';
 
@@ -31,7 +26,7 @@ export default function EventsPage() {
     }
   };
 
-  const filteredEvents = allEvents?.filter((event: EventWithGuests) => {
+  const filteredEvents = allEvents?.filter((event) => {
     const eventDate = new Date(event.date);
     const today = new Date();
     
@@ -64,8 +59,8 @@ export default function EventsPage() {
         <div>
           <h4 className="font-medium mb-2">Upcoming</h4>
           <div className="space-y-2">
-            {allEvents?.filter((event: EventWithGuests) => new Date(event.date) >= new Date())
-              .slice(0, 2).map((event: EventWithGuests) => (
+            {allEvents?.filter((event) => new Date(event.date) >= new Date())
+              .slice(0, 2).map((event) => (
                 <div
                   key={event.id}
                   className="p-2 bg-black/[.03] dark:bg-white/[.03] rounded"
@@ -91,7 +86,7 @@ export default function EventsPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Upcoming
                 </p>
-                <p className="font-medium">{allEvents?.filter((event: EventWithGuests) => new Date(event.date) >= new Date()).length || 0}</p>
+                <p className="font-medium">{allEvents?.filter((event) => new Date(event.date) >= new Date()).length || 0}</p>
               </div>
             </div>
           </div>
@@ -137,7 +132,7 @@ export default function EventsPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4">
-            {filteredEvents?.map((event: EventWithGuests) => (
+            {filteredEvents?.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>
@@ -145,58 +140,27 @@ export default function EventsPage() {
       </main>
 
       {/* Right Sidebar */}
-      <Sidebar>
-        {/* User Profile Section */}
-        <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-          <Image
-            width={48}
-            height={48}
-            src={UserAvatar}
-            alt="User Avatar"
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <h3 className="font-semibold text-lg">John Doe</h3>
-            <p className="text-sm">john.doe@example.com</p>
+      <div className="w-64">
+        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <Image
+              src={UserAvatar}
+              alt="User avatar"
+              className="w-10 h-10 rounded-full"
+            />
+            <div>
+              <p className="font-medium">John Doe</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
+            </div>
           </div>
+          <Button
+            onClick={handleLogout}
+            className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+          >
+            Logout
+          </Button>
         </div>
-        <Button
-          onClick={handleLogout}
-        >
-          Logout
-        </Button>
-        <h3 className="text-lg font-semibold mb-4">Filters</h3>
-          <div>
-            <h4 className="text-sm font-medium mb-2">Date Range</h4>
-            <select className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600">
-              <option>All</option>
-              <option>This Week</option>
-              <option>This Month</option>
-              <option>Next 3 Months</option>
-            </select>
-          </div>
-          <div>
-            <h4 className="text-sm font-medium mb-2">Event Type</h4>
-            <div className="space-y-2">
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                <span>Birthday</span>
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                <span>Meeting</span>
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                <span>Party</span>
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                <span>Other</span>
-              </label>
-          </div>
-        </div>
-      </Sidebar>
+      </div>
     </div>
   );
 }
