@@ -1,9 +1,32 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { cookies } from 'next/headers';
+import { verify } from 'jsonwebtoken';
 
 export async function GET() {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      );
+    }
+
+    // Verify the token and get user ID
+    const decoded = verify(token, process.env.JWT_SECRET || 'your-secret-key') as { userId: string };
+    const userId = decoded.userId;
+
     const events = await prisma.event.findMany({
+      where: {
+        userEvents: {
+          some: {
+            userId: userId
+          }
+        }
+      },
       include: {
         guests: true,
       },
@@ -23,6 +46,20 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      );
+    }
+
+    // Verify the token and get user ID
+    const decoded = verify(token, process.env.JWT_SECRET || 'your-secret-key') as { userId: string };
+    const userId = decoded.userId;
+
     const formData = await request.formData();
     
     // Extract event details
@@ -54,7 +91,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create event with guests in a transaction
+    // Create event with guests and user association in a transaction
     const event = await prisma.$transaction(async (tx) => {
       // Create the event
       const event = await tx.event.create({
@@ -65,6 +102,14 @@ export async function POST(request: Request) {
           location,
           notes: notes || '',
           slug: title.replace(/\s+/g, '-').toLowerCase(),
+        },
+      });
+
+      // Create user-event association
+      await tx.userEvent.create({
+        data: {
+          userId,
+          eventId: event.id,
         },
       });
 

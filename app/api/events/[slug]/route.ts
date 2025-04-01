@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { cookies } from 'next/headers';
+import { verify } from 'jsonwebtoken';
 
 export async function GET(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    // Find the event by slug
     const event = await prisma.event.findUnique({
       where: { slug: params.slug },
       include: {
@@ -18,6 +24,33 @@ export async function GET(
         { error: 'Event not found' },
         { status: 404 }
       );
+    }
+
+    // If user is authenticated, verify they have access to the event
+    if (token) {
+      try {
+        const decoded = verify(token, process.env.JWT_SECRET || 'your-secret-key') as { userId: string };
+        const userId = decoded.userId;
+
+        // Check if user has access to this event
+        const userEvent = await prisma.userEvent.findFirst({
+          where: {
+            userId,
+            eventId: event.id,
+          },
+        });
+
+        // If user doesn't have access, return 403
+        if (!userEvent) {
+          return NextResponse.json(
+            { error: 'Access denied' },
+            { status: 403 }
+          );
+        }
+      } catch (error) {
+        // If token is invalid, continue without user verification
+        console.error('Token verification failed:', error);
+      }
     }
 
     return NextResponse.json(event);
