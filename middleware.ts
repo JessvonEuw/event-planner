@@ -21,6 +21,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Allow access to individual event pages
+  if (path.match(/^\/events\/[^\/]+$/)) {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get('token')?.value;
 
   if (!token) {

@@ -19,7 +19,7 @@ const Button = ({
         h-10
         px-4
         py-2
-        rounded-md
+        rounded-full
         text-sm
         font-medium
         bg-terracotta

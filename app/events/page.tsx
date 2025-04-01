@@ -3,18 +3,24 @@
 import { useState } from 'react';
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
+import { House, User } from 'lucide-react';
 import EventCard from "./EventCard";
 import Sidebar from "./Sidebar";
 import Button from '@/app/components/Button';
+import FilterButton from '@/app/components/FilterButton';
 import LinkButton from '@/app/components/LinkButton';
+import NavLink from '@/app/components/NavLink';
 import { useEvents } from "@/hooks/useEvents";
+import { useUser } from "@/hooks/useUser";
 import UserAvatar from "@/assets/random-user.jpg";
 
 type FilterType = 'all' | 'upcoming' | 'past';
 
 export default function EventsPage() {
+  const filters = ['all', 'upcoming', 'past'];
   const router = useRouter();
   const { data: allEvents, isLoading: isLoadingEvents } = useEvents();
+  const { data: user } = useUser();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
   const handleLogout = async () => {
@@ -49,13 +55,64 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 min-h-80 min-w-4/6">
+    <div className="flex flex-col lg:flex-row gap-6 min-h-screen min-w-4/6">
       {/* Left Sidebar */}
       <Sidebar>
-        <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
         <LinkButton href="/events/create">
           New Event
         </LinkButton>
+        <div className="flex flex-col justify-center items-center h-100 gap-2 mx-auto">
+          <NavLink href="/events" icon={<House />}>All Events</NavLink>
+          <NavLink href="/events/create" icon={<User />}>User Profile</NavLink>
+        </div>
+      </Sidebar>
+
+      {/* Main Content */}
+      <main className="flex-1">
+        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+          <div className="flex flex-col justify-between mb-6">
+            <h2 className="text-2xl font-bold">Events</h2>
+            <div className="flex gap-2">
+              {filters.map((filter) => (
+                <FilterButton
+                  key={filter}
+                  onClick={() => setActiveFilter(filter as FilterType)}
+                  selected={activeFilter === filter}
+                >
+                  {filter}
+                </FilterButton>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            {filteredEvents?.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* Right Sidebar */}
+      <Sidebar>
+        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <Image
+              src={UserAvatar}
+              alt="User avatar"
+              className="w-10 h-10 rounded-full"
+            />
+            <div>
+              <p className="font-medium">{user?.name || 'Loading...'}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{user?.email || 'Loading...'}</p>
+            </div>
+          </div>
+          <Button
+            onClick={handleLogout}
+            className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+          >
+            Logout
+          </Button>
+        </div>
         <div>
           <h4 className="font-medium mb-2">Upcoming</h4>
           <div className="space-y-2">
@@ -92,75 +149,6 @@ export default function EventsPage() {
           </div>
         </div>
       </Sidebar>
-
-      {/* Main Content */}
-      <main className="flex-1">
-        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-          <div className="flex flex-col justify-between mb-6">
-            <h2 className="text-2xl font-bold">Events</h2>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setActiveFilter('all')}
-                className={`px-4 py-2 rounded-md ${
-                  activeFilter === 'all'
-                    ? 'bg-amber-500 text-white'
-                    : 'bg-black/[.03] dark:bg-white/[.03] hover:bg-black/[.06] dark:hover:bg-white/[.06]'
-                }`}
-              >
-                All
-              </Button>
-              <Button
-                onClick={() => setActiveFilter('upcoming')}
-                className={`px-4 py-2 rounded-md ${
-                  activeFilter === 'upcoming'
-                    ? 'bg-amber-500 text-white'
-                    : 'bg-black/[.03] dark:bg-white/[.03] hover:bg-black/[.06] dark:hover:bg-white/[.06]'
-                }`}
-              >
-                Upcoming
-              </Button>
-              <Button
-                onClick={() => setActiveFilter('past')}
-                className={`px-4 py-2 rounded-md ${
-                  activeFilter === 'past'
-                    ? 'bg-amber-500 text-white'
-                    : 'bg-black/[.03] dark:bg-white/[.03] hover:bg-black/[.06] dark:hover:bg-white/[.06]'
-                }`}
-              >
-                Past
-              </Button>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            {filteredEvents?.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {/* Right Sidebar */}
-      <div className="w-64">
-        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-          <div className="flex items-center gap-3 mb-4">
-            <Image
-              src={UserAvatar}
-              alt="User avatar"
-              className="w-10 h-10 rounded-full"
-            />
-            <div>
-              <p className="font-medium">John Doe</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">john@example.com</p>
-            </div>
-          </div>
-          <Button
-            onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-          >
-            Logout
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

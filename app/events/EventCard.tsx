@@ -9,12 +9,12 @@ export default function EventCard({ event }: EventCardProps) {
   return (
     <Link
       href={`/events/${event.slug}`}
-      className="block bg-white dark:bg-black/[.05] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+      className="block rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
     >
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-xl font-bold">{event.title}</h3>
-          <div className="bg-foreground text-background text-xs px-3 py-1 rounded-full">
+          <div className="text-xs px-3 py-1 rounded-full">
             {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
           </div>
         </div>
