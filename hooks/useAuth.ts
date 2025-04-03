@@ -1,28 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
+async function logout(): Promise<void> {
+  const response = await fetch('/api/auth/logout', {
+    method: 'POST',
+    credentials: 'include',
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to logout');
+  }
+}
+
 export function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const queryClient = useQueryClient();
   const router = useRouter();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/auth/check');
-        if (response.ok) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-          router.push('/login');
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-        router.push('/login');
-      }
-    };
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      // Invalidate and remove user data from cache
+      queryClient.removeQueries({ queryKey: ['user'] });
+      // Redirect to login page
+      router.push('/login');
+    },
+  });
 
-    checkAuth();
-  }, [router]);
-
-  return isAuthenticated;
+  return {
+    logout: logoutMutation.mutate,
+    isLoggingOut: logoutMutation.isPending,
+    logoutError: logoutMutation.error,
+  };
 } 

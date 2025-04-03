@@ -10,7 +10,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-umber: #8b4513;
+  --color-blue: #345995;
+  --color-blue-light: #63B4D1;
+  --color-red-deep: #8D5B4C;
   --color-terracotta: #c06d50;
   --color-sage: #5d6e1e;
   --color-purple: #4c1e4f;

@@ -12,7 +12,7 @@ export default function LinkButton({
   return (
     <Link 
       href={href} 
-      className="flex items-center justify-center bg-purple text-white px-4 py-3 rounded-full w-full"
+      className="flex items-center justify-center bg-purple text-white text-sm px-6 py-2 rounded-full"
       onClick={onClick}
     >
       {children}
