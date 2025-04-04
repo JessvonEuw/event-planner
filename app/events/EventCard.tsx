@@ -1,15 +1,16 @@
-import Link from "next/link";
 import { EventWithGuests } from "@/lib/api/events";
 import { Calendar, Navigation, Users } from "lucide-react";
+
 interface EventCardProps {
   event: EventWithGuests;
+  onClick: (event: EventWithGuests) => void;
 }
 
-export default function EventCard({ event }: EventCardProps) {
+export default function EventCard({ event, onClick }: EventCardProps) {
   return (
-    <Link
-      href={`/events/${event.slug}`}
-      className="block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+    <div
+      onClick={() => onClick(event)}
+      className="block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transform transition-shadow duration-300 ease-in-out cursor-pointer"
     >
       <div className="p-6">
       <div className="flex items-center text-sm gap-2 mb-2">
@@ -44,6 +45,6 @@ export default function EventCard({ event }: EventCardProps) {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
