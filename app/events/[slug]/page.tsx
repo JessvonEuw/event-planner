@@ -30,7 +30,7 @@ export default async function EventPage({
             Back to Events
           </Link>
         </div>
-        <div className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 p-4 rounded-md">
+        <div className="bg-red-900 text-red-200 p-4 rounded-md">
           The event you&apos;re looking for could not be found.
         </div>
       </div>

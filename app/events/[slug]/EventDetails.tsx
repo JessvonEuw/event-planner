@@ -135,7 +135,7 @@ export default function EventDetails({ event, slug }: { event: EventWithGuests; 
         </div>
       </div>
 
-      <div className="bg-white dark:bg-black/[.05] rounded-lg overflow-hidden shadow-md p-6 max-w-4xl mx-auto">
+      <div className="bg-black/[.05] rounded-lg overflow-hidden shadow-md p-6 max-w-4xl mx-auto">
         <div className="flex items-start justify-between mb-6">
           <h2 className="text-2xl font-bold">{event.title}</h2>
           <div className="bg-foreground text-background text-xs px-3 py-1 rounded-full">
@@ -223,7 +223,7 @@ export default function EventDetails({ event, slug }: { event: EventWithGuests; 
         {event.notes && (
           <div className="mt-8">
             <h3 className="text-lg font-semibold mb-2">Notes</h3>
-            <p className="text-gray-600 dark:text-gray-400">{event.notes}</p>
+            <p className="text-gray-400">{event.notes}</p>
           </div>
         )}
 

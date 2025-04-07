@@ -1,4 +1,4 @@
-import { Calendar, Navigation, X } from 'lucide-react';
+import { Calendar, Navigation, X, Users } from 'lucide-react';
 import { EventWithGuests } from "@/lib/api/events";
 import { useEffect } from 'react';
 import LinkButton from '@/app/components/LinkButton';
@@ -30,7 +30,7 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
   return (
     <>
       {/* Sidebar */}
-      <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-lg border-l border-gray-200 overflow-y-auto z-50 transform transition-transform duration-400 ease-in-out translate-x-0">
+      <div className="fixed inset-y-0 right-0 w-96 bg-primary/10 shadow-lg border-l border-gray-200 overflow-y-auto z-50 transform transition-transform duration-400 ease-in-out translate-x-0">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">{event.title}</h2>
@@ -42,38 +42,32 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
             </button>
           </div>
 
-          <div className="bg-foreground text-background text-xs px-3 py-1 rounded-full inline-block">
+          <div className="bg-white text-xs px-3 py-1 rounded-full inline-block mb-4">
             {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
           </div>
 
           <div className="space-y-2 text-sm mb-6">
-            <div className="flex items-center gap-2">
-              <Calendar size={16} />
-              <span className="text-md">{formatDate(event.date)}</span>
-            </div>
+            <p className="bg-primary/10 p-4 rounded-lg mb-6">{event.description}</p>
+            <div className="flex flex-col gap-2 px-4">
+              <div className="flex items-center gap-2">
+                <Calendar size={16} />
+                <span className="text-md">{formatDate(event.date)}</span>
+              </div>
 
-            <div className="flex items-center gap-2">
-              <Navigation size={16} />
-              <span className="text-md">{event.location}</span>
-            </div>
-          </div>
-          <p className="mb-6">{event.description}</p>
-
-
-          <div className="mb-6">
-            <h3 className="text-md font-semibold mb-2">Guests ({event.guests.length})</h3>
-            <div className="space-y-1">
-              {event.guests.map((guest, index) => (
-                <div key={index} className="text-sm">
-                  <strong>{guest.name}</strong> {guest.email && `(${guest.email})`}
-                </div>
-              ))}
+              <div className="flex items-center gap-2">
+                <Navigation size={16} />
+                <span className="text-md">{event.location}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users size={16} />
+                <span className="text-md">{event.guests.length} Guests</span>
+              </div>
             </div>
           </div>
 
           {event.notes && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">Notes</h3>
+              <h3 className="text-md font-semibold mb-2">Notes</h3>
               <p className="text-gray-500">{event.notes}</p>
             </div>
           )}

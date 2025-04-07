@@ -17,6 +17,7 @@ import EventDetailsSidebar from './EventDetailsSidebar';
 import { EventWithGuests } from '@/lib/api/events';
 
 type FilterType = 'all' | 'upcoming' | 'past';
+type SortType = 'name' | 'date-asc' | 'date-desc' | 'guests';
 
 export default function EventsPage() {
   const filters = ['all', 'upcoming', 'past'];
@@ -24,6 +25,7 @@ export default function EventsPage() {
   const { data: allEvents, isLoading: isLoadingEvents } = useEvents();
   const { data: user } = useUser();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [activeSort, setActiveSort] = useState<SortType>('date-desc');
   const [selectedEvent, setSelectedEvent] = useState<EventWithGuests | null>(null);
 
   const handleLogout = async () => {
@@ -46,6 +48,21 @@ export default function EventsPage() {
         return eventDate < today;
       default:
         return true;
+    }
+  });
+
+  const sortedAndFilteredEvents = filteredEvents?.sort((a, b) => {
+    switch (activeSort) {
+      case 'name':
+        return a.title.localeCompare(b.title);
+      case 'date-asc':
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      case 'date-desc':
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      case 'guests':
+        return b.guests.length - a.guests.length;
+      default:
+        return 0;
     }
   });
 
@@ -82,10 +99,10 @@ export default function EventsPage() {
               .slice(0, 2).map((event) => (
                 <div
                   key={event.id}
-                  className="p-2 bg-black/[.03] dark:bg-white/[.03] rounded"
+                  className="p-2 bg-white/[.03] rounded"
                 >
                   <p className="font-medium">{event.title}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-400">
                     {new Date(event.date).toLocaleDateString()}
                   </p>
                 </div>
@@ -95,14 +112,14 @@ export default function EventsPage() {
           <div>
             <h4 className="text-sm font-medium mb-2">Event Statistics</h4>
             <div className="grid grid-cols-2 gap-2">
-              <div className="p-2 bg-black/[.03] dark:bg-white/[.03] rounded">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="p-2 bg-white/[.03] rounded">
+                <p className="text-sm text-gray-400">
                   Total Events
                 </p>
                 <p className="font-medium">{allEvents?.length || 0}</p>
               </div>
-              <div className="p-2 bg-black/[.03] dark:bg-white/[.03] rounded">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="p-2 bg-white/[.03] rounded">
+                <p className="text-sm text-gray-400">
                   Upcoming
                 </p>
                 <p className="font-medium">{allEvents?.filter((event) => new Date(event.date) >= new Date()).length || 0}</p>
@@ -118,7 +135,7 @@ export default function EventsPage() {
             />
             <div>
               <p className="font-medium">{user?.name || 'Loading...'}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{user?.email || 'Loading...'}</p>
+              <p className="text-sm text-gray-400">{user?.email || 'Loading...'}</p>
             </div>
           </div>
         </div>
@@ -131,8 +148,8 @@ export default function EventsPage() {
       </Sidebar>
 
       {/* Main Content */}
-      <main className={`flex-1 transition-all duration-300 p-6 ${selectedEvent ? 'mr-96' : ''}`}>
-        <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+      <main className={`bg-black/[.05] flex-1 transition-all duration-300 p-6 ${selectedEvent ? 'mr-96' : ''}`}>
+        <div className="p-4">
           <div className="flex flex-col justify-between mb-6">
             <h2 className="text-primary text-2xl font-bold mb-8">Events</h2>
             <div className="flex gap-2">
@@ -147,8 +164,28 @@ export default function EventsPage() {
               ))}
             </div>
           </div>
+          <div className="flex justify-between items-center px-1 mb-2 text-gray-500">
+            {filteredEvents?.length === 0 ? (
+              <p className="text-gray-500">No events found</p>
+            ) : filteredEvents?.length === 1 ? (
+              <div>{filteredEvents?.length} event</div>
+            ) : (
+              <div>{filteredEvents?.length} events</div>
+            )}
+            <select
+              value={activeSort}
+              onChange={(e) => setActiveSort(e.target.value as SortType)}
+              className="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="date-desc">Date (next event first)</option>
+              <option value="date-asc">Date (oldest event first)</option>
+              <option value="name">Name</option>
+              <option value="guests">Most Guests</option>
+            </select>
+          </div>
+
           <div className="grid grid-cols-1 gap-4">
-            {filteredEvents?.map((event) => (
+            {sortedAndFilteredEvents?.map((event) => (
               <EventCard 
                 key={event.id} 
                 event={event} 
