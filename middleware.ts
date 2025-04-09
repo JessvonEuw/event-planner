@@ -26,6 +26,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Check authentication for /events and its sub-paths
+  if (path === '/events' || path.startsWith('/events/create')) {
+    const token = request.cookies.get('token')?.value;
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+    try {
+      verify(token, process.env.JWT_SECRET || 'your-secret-key');
+      return NextResponse.next();
+    } catch {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+  }
+
+  // For other protected routes
   const token = request.cookies.get('token')?.value;
 
   if (!token) {

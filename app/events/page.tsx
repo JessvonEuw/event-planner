@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { House, User } from 'lucide-react';
@@ -23,10 +23,28 @@ export default function EventsPage() {
   const filters = ['all', 'upcoming', 'past'];
   const router = useRouter();
   const { data: allEvents, isLoading: isLoadingEvents } = useEvents();
-  const { data: user } = useUser();
+  const { data: user, isLoading: isLoadingUser } = useUser();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [activeSort, setActiveSort] = useState<SortType>('date-desc');
   const [selectedEvent, setSelectedEvent] = useState<EventWithGuests | null>(null);
+
+  useEffect(() => {
+    // Check authentication on component mount
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/auth/check', {
+          credentials: 'include'
+        });
+        if (!response.ok) {
+          router.push('/login');
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        router.push('/login');
+      }
+    }
+    checkAuth();
+  }, [router]);
 
   const handleLogout = async () => {
     try {
@@ -74,16 +92,21 @@ export default function EventsPage() {
     setSelectedEvent(null);
   };
 
-  if (isLoadingEvents) {
+  if (isLoadingEvents || isLoadingUser) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
       </div>
     );
   }
 
+  if (!user) {
+    router.push('/login');
+    return null;
+  }
+
   return (
-    <div className="flex flex-col lg:flex-row justify-between min-h-screen min-w-4/6">
+    <div className="flex flex-col lg:flex-row justify-between min-w-4/6 min-h-full">
       {/* Left Sidebar */}
       <Sidebar className="text-center">
         <LinkButton href="/events/create">

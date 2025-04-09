@@ -22,12 +22,12 @@ const Button = ({
         rounded-full
         text-sm
         font-medium
-        bg-terracotta
+        bg-secondary
         text-white
-        hover:bg-amber-600
+        hover:bg-secondary/80
         focus:outline-none
         focus:ring-2
-        focus:ring-amber-500
+        focus:ring-secondary
         focus:ring-offset-2
         disabled:opacity-50
         disabled:cursor-not-allowed
