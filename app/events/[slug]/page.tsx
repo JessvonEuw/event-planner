@@ -1,7 +1,6 @@
 import prisma from "@/lib/db";
 import Link from "next/link";
-import EventEdit from './EventEdit';
-import EventActions from './EventActions';
+import EventDetails from './EventDetails';
 
 async function getEvent(slug: string) {
   return prisma.event.findUnique({
@@ -15,8 +14,7 @@ export default async function EventPage({
 }: {
   params: { slug: string };
 }) {
-  const loadedParams = await params;
-  const event = await getEvent(loadedParams.slug);
+  const event = await getEvent(params.slug);
 
   if (!event) {
     return (
@@ -39,12 +37,7 @@ export default async function EventPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">{event.title}</h1>
-        <EventActions slug={loadedParams.slug} />
-      </div>
-
-      <EventEdit event={event} slug={loadedParams.slug} />
+      <EventDetails event={event} slug={params.slug} />
     </div>
   );
 }

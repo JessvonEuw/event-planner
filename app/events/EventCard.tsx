@@ -14,7 +14,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
     >
       <div className="p-6">
       <div className="flex items-center text-sm gap-2 mb-2">
-            <Calendar size={16} color="blue" />
+            <Calendar size={16} color="green" />
             {new Date(event.date).toLocaleDateString('en-US', {
               weekday: 'short',
               month: 'short',

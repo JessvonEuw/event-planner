@@ -64,6 +64,7 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
               </div>
             </div>
           </div>
+          <div className="px-4">
 
           {event.notes && (
             <div className="mb-6">
@@ -76,10 +77,11 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
             <LinkButton
               href={`/events/${event.slug}`}
               variant="regular"
-            >
+              >
               View Full Details
             </LinkButton>
           </div>
+              </div>
         </div>
       </div>
     </>

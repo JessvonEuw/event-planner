@@ -106,7 +106,7 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row justify-between min-w-4/6 min-h-full">
+    <div className="flex flex-col lg:flex-row justify-between min-w-4/6 min-h-screen">
       {/* Left Sidebar */}
       <Sidebar className="text-center">
         <LinkButton href="/events/create">
@@ -162,12 +162,12 @@ export default function EventsPage() {
             </div>
           </div>
         </div>
-        <Button
-          onClick={handleLogout}
-          className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+        <LinkButton
+          href="/logout"
+          variant="outline"
         >
           Logout
-        </Button>
+        </LinkButton>
       </Sidebar>
 
       {/* Main Content */}

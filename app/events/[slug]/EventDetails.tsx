@@ -1,11 +1,6 @@
 'use client';
 
-import { useState } from 'react';
 import Link from "next/link";
-import Button from '@/app/components/Button';
-import EventForm from '@/app/components/EventForm';
-import GuestForm from '@/app/components/GuestForm';
-import { useUpdateEvent, useDeleteEvent } from '@/hooks/useEvents';
 
 interface EventWithGuests {
   id: string;
@@ -32,107 +27,16 @@ function formatDate(date: Date): string {
 }
 
 export default function EventDetails({ event, slug }: { event: EventWithGuests; slug: string }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isEditingGuests, setIsEditingGuests] = useState(false);
-  const updateEvent = useUpdateEvent(slug);
-  const deleteEvent = useDeleteEvent();
-
-  const handleEventUpdate = async (data: {
-    title: string;
-    description: string;
-    date: string;
-    location: string;
-    notes: string;
-  }) => {
-    try {
-      await updateEvent.mutateAsync({
-        ...data,
-        guests: event.guests.map(guest => ({
-          name: guest.name,
-          email: guest.email || '',
-        })),
-      });
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error updating event:', error);
-    }
-  };
-
-  const handleGuestsUpdate = async (guests: { name: string; email: string }[]) => {
-    try {
-      await updateEvent.mutateAsync({
-        title: event.title,
-        description: event.description || '',
-        date: new Date(event.date).toISOString().split('T')[0],
-        location: event.location,
-        notes: event.notes || '',
-        guests,
-      });
-      setIsEditingGuests(false);
-    } catch (error) {
-      console.error('Error updating guests:', error);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this event? This action cannot be undone.")) {
-      return;
-    }
-
-    try {
-      await deleteEvent.mutateAsync(slug);
-      window.location.href = '/events';
-    } catch (error) {
-      console.error('Error deleting event:', error);
-    }
-  };
-
-  if (isEditing) {
-    return (
-      <EventForm
-        onSubmit={handleEventUpdate}
-        initialData={{
-          title: event.title,
-          description: event.description || '',
-          date: new Date(event.date).toISOString().split('T')[0],
-          location: event.location,
-          notes: event.notes || '',
-        }}
-      />
-    );
-  }
-
-  if (isEditingGuests) {
-    return (
-      <GuestForm
-        onSubmit={handleGuestsUpdate}
-        onBack={() => setIsEditingGuests(false)}
-        initialGuests={event.guests.map(guest => ({
-          name: guest.name,
-          email: guest.email || '',
-        }))}
-      />
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">{event.title}</h1>
-        <div className="flex gap-2">
-          <Button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-          >
-            Delete Event
-          </Button>
-          <Link
-            href="/events"
-            className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity"
-          >
-            Back to Events
-          </Link>
-        </div>
+        <Link
+          href="/events"
+          className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity"
+        >
+          Back to Events
+        </Link>
       </div>
 
       <div className="bg-black/[.05] rounded-lg overflow-hidden shadow-md p-6 max-w-4xl mx-auto">
@@ -228,18 +132,18 @@ export default function EventDetails({ event, slug }: { event: EventWithGuests; 
         )}
 
         <div className="mt-8 flex gap-4">
-          <Button
-            onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity"
+          <Link
+            href={`/events/${slug}/edit`}
+            className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity inline-block"
           >
             Edit Event Details
-          </Button>
-          <Button
-            onClick={() => setIsEditingGuests(true)}
-            className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity"
+          </Link>
+          <Link
+            href={`/events/${slug}/edit/guests`}
+            className="px-4 py-2 bg-foreground rounded-md hover:opacity-90 transition-opacity inline-block"
           >
             Edit Guests
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import EventForm from '@/app/components/EventForm';
 import GuestForm from '@/app/components/GuestForm';
 import LinkButton from '@/app/components/LinkButton';
 import { useCreateEvent } from '@/hooks/useEvents';
+import EventFlowLayout from '@/app/components/EventFlowLayout';
 
 type EventDetails = {
   title: string;
@@ -61,34 +62,34 @@ export default function EventCreateForm() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  return (
-    <div>
-      {success ? (
-        <div className="flex flex-col items-center justify-center gap-4 h-screen">
-          <h1 className="text-2xl font-bold">Event created successfully</h1>
-          <div className="flex flex-col gap-2">
-            <Button
-              onClick={handleCopyLink}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-            >
-              {copied ? 'Link copied!' : 'Share event link'}
-            </Button>
-            <LinkButton href="/events" onClick={() => setSuccess(false)}>See your events</LinkButton>
-            <LinkButton href="/events/create" onClick={() => setSuccess(false)}>Create another event</LinkButton>
-          </div>
+  if (success) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 h-screen">
+        <h1 className="text-2xl font-bold">Event created successfully</h1>
+        <div className="flex flex-col gap-2">
+          <Button
+            onClick={handleCopyLink}
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+          >
+            {copied ? 'Link copied!' : 'Share event link'}
+          </Button>
+          <LinkButton href="/events" onClick={() => setSuccess(false)}>See your events</LinkButton>
+          <LinkButton href="/events/create" onClick={() => setSuccess(false)}>Create another event</LinkButton>
         </div>
+      </div>
+    );
+  }
+
+  return (
+    <EventFlowLayout currentStep={currentStep === 1 ? 'details' : 'guests'}>
+      {currentStep === 1 ? (
+        <EventForm onSubmit={handleEventDetailsSubmit} />
       ) : (
-        <>
-          {currentStep === 1 ? (
-            <EventForm onSubmit={handleEventDetailsSubmit} />
-          ) : (
-            <GuestForm
-              onSubmit={handleGuestsSubmit}
-              onBack={() => setCurrentStep(1)}
-            />
-          )}
-        </>
+        <GuestForm
+          onSubmit={handleGuestsSubmit}
+          onBack={() => setCurrentStep(1)}
+        />
       )}
-    </div>
+    </EventFlowLayout>
   );
 }

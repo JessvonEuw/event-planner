@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
-import EventFormWrapper from "./EventFormWrapper";
+import GuestFormWrapper from "./GuestFormWrapper";
 import EventFlowLayout from "@/app/components/EventFlowLayout";
 
 async function getEvent(slug: string) {
@@ -10,7 +10,7 @@ async function getEvent(slug: string) {
   });
 }
 
-export default async function EditEventPage({
+export default async function EditGuestsPage({
   params,
 }: {
   params: { slug: string };
@@ -22,18 +22,21 @@ export default async function EditEventPage({
   }
 
   return (
-    <EventFlowLayout slug={params.slug} currentStep="details">
-      <EventFormWrapper
-        initialData={{
+    <EventFlowLayout slug={params.slug} currentStep="guests">
+      <GuestFormWrapper
+        initialGuests={event.guests.map(guest => ({
+          name: guest.name,
+          email: guest.email || '',
+        }))}
+        slug={params.slug}
+        eventDetails={{
           title: event.title,
           description: event.description || '',
           date: new Date(event.date).toISOString().split('T')[0],
           location: event.location,
           notes: event.notes || '',
         }}
-        slug={params.slug}
-        guests={event.guests}
       />
     </EventFlowLayout>
   );
-}
+} 
