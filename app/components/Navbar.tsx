@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import LinkButton from './LinkButton';
-import Logo from '@/assets/plan-pulse.png';
+import Logo from '@/public/plan-pulse.png';
 
 export default function Navbar() {
   return (

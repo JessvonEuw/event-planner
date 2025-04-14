@@ -113,24 +113,24 @@ export default function EventsPage() {
           <NavLink href="/events" icon={<House />}>All Events</NavLink>
           <NavLink href="/events/create" icon={<User />}>User Profile</NavLink>
         </div>
-        <div className="flex flex-col gap-2">
-          <h4 className="font-medium mb-2">Upcoming</h4>
-          <div>
-            {allEvents?.filter((event) => new Date(event.date) >= new Date())
-              .slice(0, 2).map((event) => (
-                <div
-                key={event.id}
-                className="p-2 bg-white/[.03] rounded"
-                >
-                  <p className="font-medium">{event.title}</p>
-                  <p className="text-sm text-gray-400">
-                    {new Date(event.date).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-          </div>
-          <h4 className="text-sm font-medium mb-2">Event Statistics</h4>
-          <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-4">
+          <h4 className="text-sm font-medium">Next Event</h4>
+          {allEvents?.filter((event) => new Date(event.date) >= new Date())
+            .slice(0, 1).map((event) => (
+              <div
+              key={event.id}
+              className="p-2 bg-white/[.03] rounded"
+              >
+                <p className="font-medium">{event.title}</p>
+                <p className="text-sm text-gray-400">
+                  {new Date(event.date).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+
+        <div className="flex flex-col">
+          <h4 className="text-sm font-medium">Event Statistics</h4>
+          <div className="grid grid-cols-2 gap-2 mb-10">
             <div className="p-2 bg-white/[.03] rounded">
               <p className="text-sm text-gray-400">
                 Total Events
@@ -145,7 +145,6 @@ export default function EventsPage() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
           <p className="font-medium">{user?.name || 'Loading...'}</p>
           <p className="text-sm text-gray-400 mb-2">{user?.email || 'Loading...'}</p>
           <Button

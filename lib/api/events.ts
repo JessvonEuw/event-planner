@@ -1,7 +1,10 @@
-import { Event, Guest } from '@prisma/client';
+import { Event, Guest, UserEvent, User } from '@prisma/client';
 
 export interface EventWithGuests extends Event {
   guests: Guest[];
+  userEvents: (UserEvent & {
+    user: User;
+  })[];
 }
 
 export interface EventFormData {

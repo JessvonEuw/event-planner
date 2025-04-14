@@ -1,7 +1,5 @@
 import prisma from "@/lib/db";
 import EventDetails from './EventDetails';
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 
 async function getEvent(slug: string) {
   return prisma.event.findUnique({
@@ -24,8 +22,6 @@ export default async function EventPage({
 }) {
   const { slug } = await params;
   const event = await getEvent(slug);
-  const session = await getServerSession(authOptions);
-  const currentUser = session?.user;
 
   if (!event) {
     return (
@@ -41,6 +37,6 @@ export default async function EventPage({
   }
 
   return (
-    <EventDetails event={event} slug={slug} currentUser={currentUser} />
+    <EventDetails event={event} slug={slug} />
   );
 }

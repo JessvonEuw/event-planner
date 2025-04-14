@@ -11,9 +11,9 @@ export default function LinkButton({
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void,
   variant?: 'regular' | 'outline'
 }) {
-  const baseStyles = "flex items-center justify-center text-sm px-6 py-2 rounded-full";
+  const baseStyles = "flex items-center justify-center text-sm px-6 py-2 border-2 border-secondary rounded-md cursor-pointer";
   const regularStyles = "bg-secondary text-white";
-  const outlineStyles = "border-2 border-secondary text-secondary hover:bg-secondary hover:text-white transition-colors";
+  const outlineStyles = "text-secondary hover:bg-secondary hover:text-white transition-colors";
 
   return (
     <Link 

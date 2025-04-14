@@ -7,7 +7,7 @@ import Pill from "@/app/components/Pill";
 import { deleteEvent } from "@/lib/api/events";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { User } from "next-auth";
+import { useUser } from "@/hooks/useUser";
 
 // Helper function to format dates
 function formatDate(date: Date): string {
@@ -22,14 +22,13 @@ function formatDate(date: Date): string {
 export default function EventDetails({ 
   event, 
   slug,
-  currentUser 
 }: { 
   event: EventWithGuests; 
   slug: string;
-  currentUser?: User;
 }) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
+  const { data: currentUser } = useUser();
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
@@ -50,7 +49,7 @@ export default function EventDetails({
   };
 
   const isEventCreator = currentUser && event.userEvents.some(
-    userEvent => userEvent.user.id === currentUser.id
+    userEvent => userEvent.user.id === currentUser.id && userEvent.role === 'CREATOR'
   );
 
   return (
@@ -102,7 +101,7 @@ export default function EventDetails({
       )}
 
       {isEventCreator && (
-        <div className="flex justify-between gap-4 border-t pt-6">
+        <div className="flex justify-between gap-4 border-t mt-6 pt-6">
           <div className="flex gap-4">
             <LinkButton
               href={`/events/${slug}/edit`}
