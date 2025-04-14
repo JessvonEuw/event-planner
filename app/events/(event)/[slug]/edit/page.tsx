@@ -15,14 +15,15 @@ export default async function EditEventPage({
 }: {
   params: { slug: string };
 }) {
-  const event = await getEvent(params.slug);
+  const { slug } = await params;
+  const event = await getEvent(slug);
 
   if (!event) {
     notFound();
   }
 
   return (
-    <EventFlowLayout slug={params.slug} currentStep="details">
+    <EventFlowLayout slug={slug} currentStep="details">
       <EventFormWrapper
         initialData={{
           title: event.title,
@@ -31,7 +32,7 @@ export default async function EditEventPage({
           location: event.location,
           notes: event.notes || '',
         }}
-        slug={params.slug}
+        slug={slug}
         guests={event.guests}
       />
     </EventFlowLayout>

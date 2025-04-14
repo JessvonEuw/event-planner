@@ -39,7 +39,7 @@ export default function EventForm({ onSubmit, initialData }: EventFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col w-1/2 gap-6 p-10 mx-auto bg-white rounded-lg shadow-md mt-8"
+      className="flex flex-col w-3/4 gap-6 p-10 mx-auto bg-white rounded-lg shadow-md mt-8"
     >
       <div className="mb-2">
         <h2 className="text-2xl font-bold mb-4">{initialData ? 'Edit Event' : 'Create New Event'}</h2>
@@ -98,17 +98,16 @@ export default function EventForm({ onSubmit, initialData }: EventFormProps) {
           name="notes"
           id="notes"
           placeholder="Additional information about the event"
-          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+          className="px-4 py-2 border border-gray-300 rounded-md min-h-[100px]"
           value={formData.notes}
           onChange={handleChange}
         ></textarea>
       </div>
-      <Button
-        type="submit"
-        className="mt-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-      >
-        {initialData ? 'Save Changes' : 'Next: Add Guests'}
-      </Button>
+      <div className="flex justify-end gap-2">
+        <Button type="submit">
+          {initialData ? 'Save Changes' : 'Next: Add Guests'}
+        </Button>
+      </div>
     </form>
   );
 }

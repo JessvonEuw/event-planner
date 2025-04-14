@@ -64,16 +64,12 @@ export default function EventCreateForm() {
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 h-screen">
+      <div className="bg-white w-3/4 mx-auto flex flex-col items-center justify-center gap-8 p-10 rounded-lg">
         <h1 className="text-2xl font-bold">Event created successfully</h1>
-        <div className="flex flex-col gap-2">
-          <Button
-            onClick={handleCopyLink}
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-          >
+        <div className="flex items-center gap-4">
+          <Button onClick={handleCopyLink}>
             {copied ? 'Link copied!' : 'Share event link'}
           </Button>
-          <LinkButton href="/events" onClick={() => setSuccess(false)}>See your events</LinkButton>
           <LinkButton href="/events/create" onClick={() => setSuccess(false)}>Create another event</LinkButton>
         </div>
       </div>

@@ -1,20 +1,18 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { House, User } from 'lucide-react';
 import EventCard from "./EventCard";
 import Sidebar from "./Sidebar";
-import Button from '@/app/components/Button';
 import FilterButton from '@/app/components/FilterButton';
 import LinkButton from '@/app/components/LinkButton';
 import NavLink from '@/app/components/NavLink';
 import { useEvents } from "@/hooks/useEvents";
 import { useUser } from "@/hooks/useUser";
-import UserAvatar from "@/assets/random-user.jpg";
 import EventDetailsSidebar from './EventDetailsSidebar';
 import { EventWithGuests } from '@/lib/api/events';
+import Button from '../components/Button';
 
 type FilterType = 'all' | 'upcoming' | 'past';
 type SortType = 'name' | 'date-asc' | 'date-desc' | 'guests';
@@ -54,7 +52,6 @@ export default function EventsPage() {
       console.error('Logout failed:', error);
     }
   };
-
   const filteredEvents = allEvents?.filter((event) => {
     const eventDate = new Date(event.date);
     const today = new Date();
@@ -116,13 +113,14 @@ export default function EventsPage() {
           <NavLink href="/events" icon={<House />}>All Events</NavLink>
           <NavLink href="/events/create" icon={<User />}>User Profile</NavLink>
         </div>
-        <h4 className="font-medium mb-2">Upcoming</h4>
-          <div className="space-y-2">
+        <div className="flex flex-col gap-2">
+          <h4 className="font-medium mb-2">Upcoming</h4>
+          <div>
             {allEvents?.filter((event) => new Date(event.date) >= new Date())
               .slice(0, 2).map((event) => (
                 <div
-                  key={event.id}
-                  className="p-2 bg-white/[.03] rounded"
+                key={event.id}
+                className="p-2 bg-white/[.03] rounded"
                 >
                   <p className="font-medium">{event.title}</p>
                   <p className="text-sm text-gray-400">
@@ -131,43 +129,32 @@ export default function EventsPage() {
                 </div>
               ))}
           </div>
-
-          <div>
-            <h4 className="text-sm font-medium mb-2">Event Statistics</h4>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="p-2 bg-white/[.03] rounded">
-                <p className="text-sm text-gray-400">
-                  Total Events
-                </p>
-                <p className="font-medium">{allEvents?.length || 0}</p>
-              </div>
-              <div className="p-2 bg-white/[.03] rounded">
-                <p className="text-sm text-gray-400">
-                  Upcoming
-                </p>
-                <p className="font-medium">{allEvents?.filter((event) => new Date(event.date) >= new Date()).length || 0}</p>
-              </div>
+          <h4 className="text-sm font-medium mb-2">Event Statistics</h4>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="p-2 bg-white/[.03] rounded">
+              <p className="text-sm text-gray-400">
+                Total Events
+              </p>
+              <p className="font-medium">{allEvents?.length || 0}</p>
             </div>
-          </div>
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <Image
-              src={UserAvatar}
-              alt="User avatar"
-              className="w-10 h-10 rounded-full"
-            />
-            <div>
-              <p className="font-medium">{user?.name || 'Loading...'}</p>
-              <p className="text-sm text-gray-400">{user?.email || 'Loading...'}</p>
+            <div className="p-2 bg-white/[.03] rounded">
+              <p className="text-sm text-gray-400">
+                Upcoming
+              </p>
+              <p className="font-medium">{allEvents?.filter((event) => new Date(event.date) >= new Date()).length || 0}</p>
             </div>
           </div>
         </div>
-        <LinkButton
-          href="/logout"
-          variant="outline"
-        >
-          Logout
-        </LinkButton>
+        <div className="flex flex-col gap-2">
+          <p className="font-medium">{user?.name || 'Loading...'}</p>
+          <p className="text-sm text-gray-400 mb-2">{user?.email || 'Loading...'}</p>
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+          >
+            Logout
+          </Button>
+        </div>
       </Sidebar>
 
       {/* Main Content */}
@@ -195,16 +182,18 @@ export default function EventsPage() {
             ) : (
               <div>{filteredEvents?.length} events</div>
             )}
-            <select
-              value={activeSort}
-              onChange={(e) => setActiveSort(e.target.value as SortType)}
+            {filteredEvents?.length !== 0 && (
+              <select
+                value={activeSort}
+                onChange={(e) => setActiveSort(e.target.value as SortType)}
               className="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               <option value="date-desc">Date (next event first)</option>
               <option value="date-asc">Date (oldest event first)</option>
               <option value="name">Name</option>
-              <option value="guests">Most Guests</option>
-            </select>
+                <option value="guests">Most Guests</option>
+              </select>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-4">

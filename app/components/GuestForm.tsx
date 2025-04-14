@@ -41,10 +41,8 @@ export default function GuestForm({ onSubmit, onBack, initialGuests = [] }: Gues
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col w-1/2 gap-6 p-10 mx-auto bg-white rounded-lg shadow-md mt-8">
-      <div className="mb-2">
-        <h2 className="text-2xl font-bold mb-4">Add Guests</h2>
-      </div>
+    <form onSubmit={handleSubmit} className="flex flex-col w-3/4 gap-4 p-10 mx-auto bg-white rounded-lg shadow-md mt-8">
+      <h2 className="text-2xl font-bold mb-4">Add Guests</h2>
 
       {guests.map((guest, index) => (
         <div key={index} className="flex gap-4 items-start">
@@ -71,36 +69,27 @@ export default function GuestForm({ onSubmit, onBack, initialGuests = [] }: Gues
             />
           </div>
           {guests.length > 1 && (
-            <Button
-              type="button"
+            <a
               onClick={() => removeGuest(index)}
-              className="mt-6 px-3 py-2 text-red-600 hover:text-red-800"
+              className="text-tertiary hover:text-primary cursor-pointer mt-6 px-3 py-2"
             >
               Remove
-            </Button>
+            </a>
           )}
         </div>
       ))}
-
+      <a
+        type="button"
+        onClick={addGuest}
+        className="text-tertiary hover:text-primary cursor-pointer"
+      >
+        + Add Guest
+      </a>
       <div className="flex gap-4">
-        <Button
-          type="button"
-          onClick={addGuest}
-          className="px-4 py-2 text-blue-600 hover:text-blue-800"
-        >
-          + Add Guest
-        </Button>
-        <Button
-          type="button"
-          onClick={onBack}
-          className="px-4 py-2 text-gray-600 hover:text-gray-800"
-        >
+        <Button type="button" onClick={onBack}>
           Back
         </Button>
-        <Button
-          type="submit"
-          className="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
+        <Button type="submit">
           {initialGuests.length > 0 ? 'Update Guests' : 'Create Event'}
         </Button>
       </div>
