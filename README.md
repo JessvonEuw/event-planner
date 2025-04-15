@@ -1,4 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Event Planner App
+
+A modern web application for planning small events with friends. Create, manage, and coordinate events seamlessly with an intuitive interface.
+
+## Live Site
+
+Check out the live application at: [https://event-planner-psi-livid.vercel.app/](https://event-planner-psi-livid.vercel.app/)
+
+## Tech Stack
+
+- **Frontend Framework**: [Next.js](https://nextjs.org) - React framework for production
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- **Database**: [Prisma with PostgreSQL](https://www.prisma.io/) - Type-safe database ORM
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/) - Secure authentication solution
 
 ## Getting Started
 
