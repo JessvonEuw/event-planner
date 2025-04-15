@@ -6,14 +6,21 @@ import EventFlowLayout from "@/app/components/EventFlowLayout";
 async function getEvent(slug: string) {
   return prisma.event.findUnique({
     where: { slug },
-    include: { guests: true },
+    include: { 
+      guests: true,
+      userEvents: {
+        include: {
+          user: true
+        }
+      }
+    },
   });
 }
 
 export default async function EditEventPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const event = await getEvent(slug);

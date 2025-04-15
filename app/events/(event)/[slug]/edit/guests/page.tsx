@@ -13,22 +13,23 @@ async function getEvent(slug: string) {
 export default async function EditGuestsPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const event = await getEvent(params.slug);
+  const { slug } = await params;
+  const event = await getEvent(slug);
 
   if (!event) {
     notFound();
   }
 
   return (
-    <EventFlowLayout slug={params.slug} currentStep="guests">
+    <EventFlowLayout slug={slug} currentStep="guests">
       <GuestFormWrapper
         initialGuests={event.guests.map(guest => ({
           name: guest.name,
           email: guest.email || '',
         }))}
-        slug={params.slug}
+        slug={slug}
         eventDetails={{
           title: event.title,
           description: event.description || '',

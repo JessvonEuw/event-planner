@@ -1,9 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Event } from "@prisma/client";
-import { fetchEvent, createEvent, updateEvent, deleteEvent } from "@/lib/api/events";
+import { Event, UserEvent, User, Guest } from "@prisma/client";
+import { fetchEvent, createEvent, updateEvent, deleteEvent, EventFormData } from "@/lib/api/events";
 
 interface EventWithGuests extends Event {
-  guests: any[]; // Replace 'any' with your Guest type
+  guests: Guest[];
+  userEvents: (UserEvent & {
+    user: User;
+  })[];
 }
 
 async function fetchEvents(): Promise<EventWithGuests[]> {
@@ -44,7 +47,7 @@ export function useUpdateEvent(slug: string) {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (data: any) => updateEvent(slug, data),
+    mutationFn: (data: EventFormData) => updateEvent(slug, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
       queryClient.invalidateQueries({ queryKey: ['events', slug] });

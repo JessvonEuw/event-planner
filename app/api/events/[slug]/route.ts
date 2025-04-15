@@ -1,19 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { cookies } from 'next/headers';
 import { verify } from 'jsonwebtoken';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params;
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
+    // const token = request.cookies.get('token')?.value;
 
-    // Find the event by slug
+     // Find the event by slug
     const event = await prisma.event.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
       include: {
         guests: true,
       },
@@ -64,10 +66,11 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params;
     const formData = await request.formData();
     
     // Extract event details
@@ -103,7 +106,7 @@ export async function PUT(
     const event = await prisma.$transaction(async (tx) => {
       // Update the event
       const event = await tx.event.update({
-        where: { slug: params.slug },
+        where: { slug: slug },
         data: {
           title,
           date: new Date(date),

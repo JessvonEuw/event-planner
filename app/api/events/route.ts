@@ -29,6 +29,11 @@ export async function GET() {
       },
       include: {
         guests: true,
+        userEvents: {
+          include: {
+            user: true
+          }
+        }
       },
       orderBy: {
         date: "asc",
