@@ -4,7 +4,7 @@ A modern web application for planning small events with friends. Create, manage,
 
 ## Live Site
 
-Check out the live application at: [https://event-planner-psi-livid.vercel.app/](https://event-planner-psi-livid.vercel.app/)
+Check out the live application at: [https://event-planner-app-lyart.vercel.app/](https://event-planner-app-lyart.vercel.app/)
 
 ## Tech Stack
 
