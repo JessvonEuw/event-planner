@@ -41,7 +41,13 @@ export async function POST(request: Request) {
     );
 
     // Create response with user data (excluding password)
-    const { password: _, ...userWithoutPassword } = user;
+    const userWithoutPassword = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt
+    };
     const response = NextResponse.json(userWithoutPassword);
 
     // Set cookie in response

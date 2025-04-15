@@ -40,12 +40,10 @@ export default function EventEdit({ event, slug }: { event: EventWithGuests; slu
     location: event.location,
     notes: event.notes || '',
   });
-  const [guests, setGuests] = useState<Guest[]>(
-    event.guests.map(guest => ({
-      name: guest.name,
-      email: guest.email || '',
-    }))
-  );
+  const initialGuests = event.guests.map(guest => ({
+    name: guest.name,
+    email: guest.email || '',
+  }));
 
   const updateEvent = useUpdateEvent(slug);
 
@@ -77,7 +75,7 @@ export default function EventEdit({ event, slug }: { event: EventWithGuests; slu
         <GuestForm
           onSubmit={handleGuestsSubmit}
           onBack={() => setCurrentStep(1)}
-          initialGuests={guests}
+          initialGuests={initialGuests}
         />
       )}
     </>

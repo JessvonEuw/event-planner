@@ -39,9 +39,13 @@ export async function POST(request: Request) {
     );
 
     // Create response with user data (excluding password)
-    // Want to separate the user data from the password
-    // "_" can denote an unused variable
-    const { password: _, ...userWithoutPassword } = user;
+    const userWithoutPassword = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt
+    };
     const response = NextResponse.json(userWithoutPassword);
 
     // Set cookie in response
