@@ -5,10 +5,11 @@ const config = {
   theme: {
     extend: {
       colors: {
-        umber: "var(--color-umber)",
-        terracotta: "var(--color-terracotta)",
-        sage: "var(--color-sage)",
-        purple: "var(--color-purple)",
+        primary: "var(--color-primary)",
+        primaryDark: "var(--color-primary-dark)",
+        secondary: "var(--color-secondary)",
+        tertiary: "var(--color-tertiary)",
+        black: "var(--color-black)",
       },
     },
   },

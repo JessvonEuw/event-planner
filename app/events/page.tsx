@@ -3,16 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { House, User } from 'lucide-react';
-import EventCard from "./EventCard";
 import Sidebar from "./Sidebar";
+import { EventWithGuests } from '@/lib/api/events';
+import { useEvents } from "@/hooks/useEvents";
+import { useUser } from "@/hooks/useUser";
+import Button from '@/app/components/Button';
 import FilterButton from '@/app/components/FilterButton';
 import LinkButton from '@/app/components/LinkButton';
 import NavLink from '@/app/components/NavLink';
-import { useEvents } from "@/hooks/useEvents";
-import { useUser } from "@/hooks/useUser";
+import EventCard from "./EventCard";
 import EventDetailsSidebar from './EventDetailsSidebar';
-import { EventWithGuests } from '@/lib/api/events';
-import Button from '../components/Button';
 
 type FilterType = 'all' | 'upcoming' | 'past';
 type SortType = 'name' | 'date-asc' | 'date-desc' | 'guests';
@@ -103,15 +103,15 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row justify-between min-w-4/6 min-h-screen">
+    <div className="flex flex-col md:flex-row justify-between min-w-4/6 min-h-screen">
       {/* Left Sidebar */}
       <Sidebar className="text-center">
         <LinkButton href="/events/create">
           New Event
         </LinkButton>
-        <div className="flex flex-col justify-center items-center h-100 gap-2 mx-auto">
+        <div className="flex flex-col justify-center items-start h-100 gap-2 mx-auto">
           <NavLink href="/events" icon={<House />}>All Events</NavLink>
-          <NavLink href="/events/create" icon={<User />}>User Profile</NavLink>
+          <NavLink href="/profile" icon={<User />}>User Profile</NavLink>
         </div>
         <div className="flex flex-col gap-4">
           <h4 className="text-sm font-medium">Next Event</h4>

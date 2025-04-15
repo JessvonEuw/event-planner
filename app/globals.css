@@ -11,18 +11,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-primary: #337357;
+  --color-primary-dark: #224F3D;
   --color-secondary: #1A1423;
   --color-tertiary: #805D93;
-  --color-silver: #C6C5B9;
   --color-black: #1A1423;
-  --color-charcoal: #37505C;
-  --color-blue: #1446A0;
-  --color-blue-light: #63B4D1;
-  --color-red-deep: #8D5B4C;
-  --color-terracotta: #c06d50;
-  --color-sage: #5d6e1e;
-  --color-purple: #4c1e4f;
-  --color-orange: #f34213;
 }
 
 body {

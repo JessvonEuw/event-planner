@@ -38,12 +38,12 @@ export default function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className={`w-full p-2 border-1 border-gray-300 rounded-sm focus:border-sage focus:ring-sage sm:text-sm ${
-          errorMessage ? 'border-terracotta' : ''
+        className={`w-full p-2 border-1 border-gray-300 rounded-sm focus:border-primary focus:ring-primary sm:text-sm ${
+          errorMessage ? 'border-red-500' : ''
         }`}
       />
       {errorMessage && (
-        <p className="mt-1 text-sm text-terracotta">{errorMessage}</p>
+        <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
       )}
     </div>
   )

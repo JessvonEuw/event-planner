@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Calendar, MapPin, X, Users } from 'lucide-react';
 import { EventWithGuests } from "@/lib/api/events";
 import LinkButton from '@/app/components/LinkButton';
-import Pill from '@/app/components/Pill';
+
 interface EventDetailsSidebarProps {
   event: EventWithGuests;
   onClose: () => void;
@@ -28,11 +28,9 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
   }, []);
 
   return (
-    <>
-      {/* Sidebar */}
-      <div className="fixed inset-y-0 right-0 w-96 bg-primary/10 shadow-lg border-l border-gray-200 overflow-y-auto z-50 transform transition-transform duration-400 ease-in-out translate-x-0 p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">{event.title}</h2>
+    <div className="fixed inset-y-0 right-0 w-96 bg-primary/10 shadow-lg border-l border-gray-200 overflow-y-auto z-50 transform transition-transform duration-400 ease-in-out translate-x-0 p-6">
+      <div className="flex justify-between items-center mb-12">
+        <h2 className="text-2xl font-bold">{event.title}</h2>
           <button 
             onClick={onClose}
             className="p-2 rounded-full hover:bg-gray-100 cursor-pointer"
@@ -40,10 +38,7 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
             <X size={20} />
           </button>
         </div>
-        <div className="flex flex-col gap-2">
-          <Pill isActive={new Date(event.date) > new Date()}>
-            {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
-          </Pill>
+        <div className="flex flex-col gap-4">
           <p className="bg-primary/10 p-4 rounded-lg mb-4">{event.description}</p>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
@@ -76,7 +71,6 @@ export default function EventDetailsSidebar({ event, onClose }: EventDetailsSide
           </LinkButton>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 } 

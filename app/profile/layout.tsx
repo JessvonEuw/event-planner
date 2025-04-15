@@ -2,7 +2,7 @@ import { ArrowLeft } from 'lucide-react';
 import InternalHeader from '@/app/components/InternalHeader';
 import LinkButton from '@/app/components/LinkButton';
 
-export default function CreateEventsLayout({ children }: { children: React.ReactNode }) {
+export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-primary/10 min-h-screen">
       <InternalHeader>

@@ -31,7 +31,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
             {event.description}
           </p>
 
-          <div className="flex items-center gap-4 text-sm text-gray-500">
+          <div className="flex flex-col md:flex-row items-start gap-4 text-sm text-gray-500">
             <div className="flex items-center gap-1">
               <MapPin size={16} />
               {event.location}
